@@ -1,0 +1,1069 @@
+/* =======================================================
+   FILTER SIDEBAR MỚI — Bộ lọc sản phẩm bên trái
+   Gồm: lọc thương hiệu, khoảng giá, danh mục
+======================================================= */
+
+/* Khung ngoài sidebar lọc — viền xám, bo góc */
+.filter-sidebar {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; /* Bo góc cắt header */
+}
+
+/* Header sidebar — nền xám nhạt, nút "Xóa tất cả" bên phải */
+.filter-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1.5px solid var(--border);
+  background: var(--bg-gray);
+}
+/* Tiêu đề + icon "Bộ lọc" — flex:1 chiếm không gian còn lại */
+.filter-sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+/* Chữ "Bộ lọc" trong header sidebar */
+.filter-sidebar-title h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin: 0;
+}
+/* Nút "Xóa tất cả" — cam nhỏ, hover nền cam nhạt */
+.filter-clear-all {
+  font-size: 0.8rem;
+  color: var(--primary);
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+.filter-clear-all:hover {
+  background: var(--primary-light);
+}
+
+/* Từng phần lọc (thương hiệu, giá...) — viền dưới phân cách */
+.filter-section {
+  border-bottom: 1.5px solid var(--border);
+  padding: 0.9rem 1.25rem;
+}
+.filter-section:last-child {
+  border-bottom: none; /* Không viền phần cuối */
+}
+
+/* Tiêu đề phần lọc — ngang: chữ trái + chevron phải (nếu có toggle) */
+.filter-section-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--secondary);
+  padding: 0;
+  margin-bottom: 0.75rem;
+}
+
+/* ── DANH SÁCH THƯƠNG HIỆU ── */
+
+/* Danh sách thương hiệu — xếp dọc, khoảng cách nhỏ */
+.brand-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.4rem;
+}
+/* Nút chọn thương hiệu — logo + tên + số sản phẩm nằm ngang */
+.brand-row-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.42rem 0.6rem;
+  border: 1.5px solid transparent; /* Placeholder, hiện khi active */
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.13s;
+  text-align: left;
+}
+.brand-row-btn:hover {
+  background: var(--primary-light);
+  border-color: rgba(232, 93, 4, 0.2);
+}
+/* Thương hiệu đang được chọn — viền cam, nền cam nhạt */
+.brand-row-btn.brand-active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+
+/* Logo thương hiệu nhỏ */
+.brand-row-logo {
+  width: 36px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 3px;
+}
+/* Chữ cái đầu tên thương hiệu — fallback khi không có logo */
+.brand-row-initial {
+  width: 36px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: var(--bg-gray);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+/* Tên thương hiệu — cắt "..." nếu dài */
+.brand-row-name {
+  flex: 1;
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.brand-row-btn.brand-active .brand-row-name {
+  color: var(--primary); /* Cam khi active */
+}
+
+/* Badge số lượng sản phẩm — pill nhỏ bên phải */
+.brand-row-count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-light);
+  background: var(--bg-gray);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.1rem 0.4rem;
+  min-width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+/* Badge cam khi thương hiệu được chọn */
+.brand-row-btn.brand-active .brand-row-count {
+  background: rgba(232, 93, 4, 0.12);
+  border-color: rgba(232, 93, 4, 0.25);
+  color: var(--primary);
+}
+
+/* Link "Xem thêm thương hiệu" */
+.show-more-brands {
+  font-size: 0.82rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+.show-more-brands:hover {
+  text-decoration: underline;
+}
+
+/* ── LỌC GIÁ ── */
+
+/* Danh sách radio khoảng giá preset */
+.price-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
+}
+/* Nhãn checkbox/radio lọc — click cả nhãn để chọn */
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0.15rem 0;
+}
+/* Input radio/checkbox trong bộ lọc — cam accent */
+.filter-checkbox input[type='radio'],
+.filter-checkbox input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.filter-checkbox:hover span {
+  color: var(--primary);
+}
+
+/* Danh mục đang được chọn — chữ cam, đậm */
+.filter-checkbox.cat-active span {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Tên danh mục chiếm hết khoảng trống, đẩy badge count sang phải */
+.cat-name {
+  flex: 1;
+}
+
+/* Wrapper nhóm danh mục con — thụt lề + đường dọc trái */
+.cat-children {
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--border);
+  margin-left: 0.55rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+}
+
+/* Nhãn input khoảng giá tùy chỉnh */
+.price-custom-label {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+/* Hàng 2 input: Từ — Đến */
+.price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+/* Input nhập giá — chiếm đều nhau */
+.price-input {
+  flex: 1;
+  padding: 0.45rem 0.6rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: var(--text);
+  outline: none;
+  text-align: center;
+  min-width: 0; /* Cho phép co nhỏ trong flex */
+}
+.price-input:focus {
+  border-color: var(--primary);
+}
+/* Dấu "—" giữa 2 input giá */
+.price-sep {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+/* Thanh kéo giá (native range) — cam accent */
+.price-slider {
+  width: 100%;
+  accent-color: var(--primary);
+  cursor: pointer;
+  height: 4px;
+}
+
+/* ── LAYOUT SIDEBAR ── */
+
+/* Sidebar trên desktop — chiều rộng cố định 260px */
+.sidebar-desktop {
+  width: 260px;
+  flex-shrink: 0; /* Không co lại khi cột sản phẩm bị hẹp */
+}
+/* Sidebar trên mobile — panel trượt từ trái, phủ toàn màn hình */
+.sidebar-mobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 290px;
+  height: 100vh;
+  background: var(--bg);
+  z-index: 1001;
+  overflow-y: auto;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15); /* Bóng bên phải panel */
+}
+/* Desktop: ẩn nút mở/đóng sidebar */
+@media (min-width: 769px) {
+  .filter-toggle {
+    display: none;
+  }
+  .close-filter {
+    display: none;
+  }
+}
+/* Mobile: ẩn sidebar desktop, dùng sidebar-mobile */
+@media (max-width: 768px) {
+  .sidebar-desktop {
+    display: none;
+  }
+}
+
+/* Chấm cam báo có filter đang áp dụng — xuất hiện bên cạnh nút "Bộ lọc" */
+.filter-badge {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: inline-block;
+  margin-left: 2px;
+}
+
+/* =======================================================
+   DUAL RANGE SLIDER (native input range)
+   2 input range chồng lên nhau để tạo thanh kéo 2 đầu
+======================================================= */
+
+/* Wrapper — vùng cao 36px để thumb không bị cắt */
+.dual-range-wrap {
+  position: relative;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+/* Track — đường xám nền */
+.dual-range-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  pointer-events: none; /* Không nhận sự kiện — chỉ là nền */
+}
+
+/* Fill cam — phần giữa 2 điểm đã chọn, set width/left qua JS */
+.dual-range-fill {
+  position: absolute;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+/* Input range ẩn background — chỉ hiện thumb, 2 input chồng nhau */
+.dual-range-input {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: transparent; /* Ẩn track mặc định của range */
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none; /* Chỉ thumb mới nhận sự kiện (pointer-events:all) */
+  outline: none;
+}
+
+/* Thumb (nút kéo) — hình tròn trắng viền cam */
+.dual-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid var(--primary);
+  box-shadow: 0 2px 6px rgba(232, 93, 4, 0.3); /* Glow cam nhẹ */
+  cursor: grab;
+  pointer-events: all; /* Chỉ thumb nhận click/drag */
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.dual-range-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid var(--primary);
+  box-shadow: 0 2px 6px rgba(232, 93, 4, 0.3);
+  cursor: grab;
+  pointer-events: all;
+}
+
+/* ── ADMIN ORDERS — Modal chi tiết đơn hàng ── */
+/* (Được đặt trong filter.css vì đây là file chứa các shared styles) */
+
+/* Mã đơn là link bấm được — underline chấm */
+.ao-order-code-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--secondary);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+.ao-order-code-btn:hover {
+  color: var(--primary);
+}
+
+/* Modal chi tiết đơn — rộng hơn modal thông thường */
+.ao-detail-modal {
+  max-width: 580px;
+  overflow: hidden;
+}
+
+/* Body modal: các section xếp dọc, scroll dọc khi nội dung dài */
+.ao-detail-body {
+  gap: 0 !important;
+  padding: 0 !important;
+  overflow-y: auto;
+}
+
+/* Từng section trong modal chi tiết — padding + viền dưới */
+.ao-detail-section {
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.ao-detail-section:last-child {
+  border-bottom: none;
+}
+
+/* Tiêu đề section — nhỏ, viết hoa xám */
+.ao-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+/* Hàng thông tin khách hàng: icon + giá trị */
+.ao-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+.ao-detail-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Danh sách sản phẩm trong modal */
+.ao-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+/* Từng sản phẩm — nền xám nhạt */
+.ao-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: var(--bg-gray);
+  border-radius: var(--radius-sm);
+}
+
+/* Section thanh toán — nền xanh cực nhạt để phân biệt */
+.ao-payment-section {
+  background: #f8faff;
+}
+
+/* Grid chi tiết thanh toán */
+.ao-payment-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+/* Từng dòng thanh toán: nhãn xám trái + giá trị đậm phải */
+.ao-payment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.ao-payment-row span:first-child {
+  color: var(--text-light); /* Nhãn mờ hơn */
+}
+/* Dòng tổng cộng — to hơn, viền trên phân cách */
+.ao-payment-total {
+  font-size: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1.5px solid var(--border);
+  margin-top: 0.2rem;
+}
+
+/* Nút xác nhận đã thu tiền COD — xanh dương nhỏ */
+.ao-confirm-pay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: #0ea5e9; /* Xanh dương — phân biệt với cam chính */
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.18s,
+    transform 0.15s;
+  white-space: nowrap;
+}
+.ao-confirm-pay-btn:hover:not(:disabled) {
+  background: #0284c7;
+  transform: translateY(-1px);
+}
+.ao-confirm-pay-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Thumb range khi hover/drag — phóng to + glow */
+.dual-range-input::-webkit-slider-thumb:hover,
+.dual-range-input:active::-webkit-slider-thumb {
+  transform: scale(1.25);
+  box-shadow: 0 3px 10px rgba(232, 93, 4, 0.45);
+  cursor: grabbing;
+}
+
+/* z-index để 2 input range chồng đúng, min ở trên max */
+.dual-range-min {
+  z-index: 3;
+}
+.dual-range-max {
+  z-index: 4;
+}
+
+/* =======================================================
+   TOAST NOTIFICATION — Thông báo popup góc dưới phải
+   Xuất hiện tự động, tự ẩn sau 3-4 giây
+======================================================= */
+
+/* Container chứa các toast — cố định góc dưới phải */
+.toast-wrapper {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  z-index: 9999;
+  pointer-events: none; /* Wrapper không chặn click — chỉ toast-item mới chặn */
+}
+
+/* Từng toast — nền trắng, bóng đậm, bo góc */
+.toast-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.13);
+  min-width: 240px;
+  max-width: 360px;
+  pointer-events: all; /* Toast nhận click để đóng */
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+/* Nội dung thông báo — chiếm không gian còn lại */
+.toast-msg {
+  flex: 1;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Nút X đóng toast */
+.toast-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.toast-close:hover {
+  opacity: 1;
+}
+
+/* Keyframe: slide từ phải vào khi xuất hiện */
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(110%); /* Bắt đầu ngoài màn hình phải */
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+/* Keyframe: slide sang phải khi ẩn */
+@keyframes toastSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(110%);
+    opacity: 0;
+  }
+}
+
+/* Class JS thêm khi toast vừa xuất hiện */
+.toast-enter {
+  animation: toastSlideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+/* Class JS thêm khi toast đang ẩn */
+.toast-exit {
+  animation: toastSlideOut 0.32s ease-in forwards;
+}
+
+/* =======================================================
+   CART BADGE POP ANIMATION
+   Khi thêm sản phẩm vào giỏ, badge số lượng "nảy"
+   JS thêm class .badge-pop vào .cart-badge
+======================================================= */
+@keyframes badgePop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.55); /* Phóng to đỉnh */
+  }
+  70% {
+    transform: scale(0.88); /* Thu nhỏ hơn ban đầu (bounce) */
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* Animation nảy dùng cubic-bezier spring */
+.cart-badge.badge-pop {
+  animation: badgePop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Toast nhỏ hơn trên mobile */
+@media (max-width: 480px) {
+  .toast-wrapper {
+    right: 0.75rem;
+    bottom: 1rem;
+  }
+  .toast-item {
+    min-width: 200px;
+    max-width: calc(100vw - 1.5rem); /* Không tràn màn hình */
+    font-size: 0.82rem;
+  }
+}
+
+/* =======================================================
+   ADMIN USERS — Modal thêm/sửa tài khoản
+======================================================= */
+
+/* Modal tài khoản — tối đa 500px, bóng đậm */
+.au-user-modal {
+  max-width: 500px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+}
+
+/* Header modal — gradient cam nhạt tạo điểm nhấn nhẹ */
+.au-user-modal .admin-modal-header {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffffff 68%);
+  padding: 1.25rem 1.5rem;
+}
+.au-user-modal .admin-modal-header h2 {
+  font-size: 1.1rem;
+}
+
+/* Body modal — padding nhỏ gọn */
+.au-user-modal-body {
+  gap: 1rem;
+  padding: 1.35rem 1.5rem 1.25rem;
+}
+.au-user-modal-body .admin-form-row {
+  gap: 0.45rem;
+}
+.au-user-modal-body .admin-form-row label {
+  font-size: 0.86rem;
+  letter-spacing: 0.01em;
+}
+/* Input/select trong modal — nền xám nhạt, bo góc rộng */
+.au-user-modal-body input,
+.au-user-modal-body select {
+  min-height: 44px; /* Touch-friendly */
+  border-color: #dbe3ee;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+.au-user-modal-body input:hover,
+.au-user-modal-body select:hover {
+  border-color: #cbd5e1;
+  background: #fff;
+}
+.au-user-modal-body input:focus,
+.au-user-modal-body select:focus {
+  background: #fff;
+}
+
+/* Grid 2 cột cho form tài khoản */
+.au-user-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+/* Hộp gợi ý vai trò — xám nhạt, text nhỏ */
+.au-role-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: var(--text-light);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+/* Badge vai trò nhỏ trong gợi ý */
+.au-role-hint span {
+  flex-shrink: 0;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  color: #fff;
+  background: #64748b; /* Xám mặc định */
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+/* Màu badge theo từng vai trò — tăng dần "mức độ nghiêm trọng" theo quyền hạn: xanh dương (an
+   toàn, quyền hạn cơ bản) → tím (trung gian, quyền nội bộ) → đỏ (quyền cao nhất, admin có thể
+   thay đổi toàn hệ thống nên dùng màu cảnh báo mạnh nhất để admin tạo tài khoản luôn ý thức rõ
+   đang cấp quyền lớn). Không dùng cam thương hiệu cho vai trò nào để tránh lẫn với CTA thông
+   thường — đây là context "phân loại/cảnh báo", không phải "hành động". */
+.au-role-hint--customer span {
+  background: #0ea5e9; /* Xanh — khách hàng */
+}
+.au-role-hint--staff span {
+  background: #8b5cf6; /* Tím — nhân viên */
+}
+.au-role-hint--admin span {
+  background: #ef4444; /* Đỏ — admin */
+}
+
+/* Footer modal */
+.au-user-modal .admin-modal-footer {
+  padding: 1rem 1.5rem;
+}
+.au-user-modal .admin-modal-footer .admin-btn-primary,
+.au-user-modal .admin-modal-footer .admin-btn-ghost {
+  min-height: 40px;
+  padding-inline: 1.05rem;
+}
+
+/* Mobile: modal full-width, form 1 cột */
+@media (max-width: 560px) {
+  .au-user-modal {
+    max-width: calc(100vw - 1.5rem);
+  }
+  .au-user-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =======================================================
+   ADMIN USERS — Modal quản lý địa chỉ khách hàng
+======================================================= */
+
+/* Modal địa chỉ — rộng hơn để chứa form đầy đủ */
+.au-addr-modal {
+  width: min(640px, 95vw);
+}
+/* Body có thể scroll khi nhiều địa chỉ */
+.au-addr-modal .admin-modal-body {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+/* Danh sách địa chỉ — xếp dọc */
+.au-addr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Card từng địa chỉ — viền xám mặc định */
+.au-addr-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  transition: border-color 0.18s;
+}
+/* Địa chỉ mặc định — viền cam, nền cam nhạt */
+.au-addr-card--default {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+/* Card "Thêm địa chỉ mới" — viền chấm cam */
+.au-addr-card--add {
+  border-color: var(--primary);
+  border-style: dashed;
+  background: #fff8f5;
+}
+
+/* Padding bên trong card */
+.au-addr-card-inner {
+  padding: 0.85rem 1rem;
+}
+
+/* Tiêu đề form inline trong card */
+.au-addr-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Hàng trên card: số thứ tự + badge + nút hành động */
+.au-addr-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+/* Nhóm trái: icon + số thứ tự + badge mặc định */
+.au-addr-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+/* Số thứ tự địa chỉ */
+.au-addr-order {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  font-weight: 600;
+}
+/* Badge "Mặc định" — pill cam */
+.au-addr-default-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+/* Nội dung địa chỉ: tên + điện thoại + địa chỉ */
+.au-addr-card-body {
+}
+/* Hàng tên + điện thoại */
+.au-addr-name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.2rem;
+}
+.au-addr-name strong {
+  font-size: 0.88rem;
+}
+/* Số điện thoại cạnh tên người nhận */
+.au-addr-phone {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+/* Địa chỉ text */
+.au-addr-text {
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+/* Nút hành động: Sửa, Xóa, Đặt mặc định */
+.au-addr-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+/* Nút hành động pill nhỏ */
+.au-addr-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+.au-addr-action-btn:hover:not(:disabled) {
+  background: var(--bg-gray);
+  border-color: var(--text-light);
+}
+.au-addr-action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+/* Nút Sửa — hover xanh dương */
+.au-addr-action-btn.au-addr-action-edit:hover:not(:disabled) {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+/* Nút Xóa — hover đỏ */
+.au-addr-action-btn.au-addr-action-del:hover:not(:disabled) {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fff1f2;
+}
+
+/* Xác nhận xóa inline trong card — nền đỏ nhạt */
+.au-addr-delete-confirm {
+  background: #fff1f2;
+  border-radius: var(--radius-sm);
+}
+.au-addr-delete-confirm p {
+  font-size: 0.87rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+/* Form thêm/sửa địa chỉ inline trong card */
+.au-addr-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+/* Grid 2 cột: tên + điện thoại cạnh nhau */
+.au-addr-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+.au-addr-form .admin-form-row {
+  margin: 0;
+}
+/* Checkbox "Đặt làm mặc định" */
+.au-addr-default-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+}
+/* Footer form địa chỉ: nút Lưu + Hủy */
+.au-addr-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--border);
+  margin-top: 0.2rem;
+}
+
+/* Mobile: form 1 cột, wrap nút hành động */
+@media (max-width: 520px) {
+  .au-addr-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .au-addr-card-top {
+    flex-wrap: wrap;
+  }
+  .au-addr-actions {
+    flex-wrap: wrap;
+  }
+  .au-addr-action-btn {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+/* =======================================================
+   DUAL RANGE SLIDER v2 — Custom JS drag (thay thế native range)
+   Kéo cả 2 thumb tự do, không bị giới hạn như native input
+======================================================= */
+
+/* Wrapper — user-select:none tránh bôi text khi drag */
+.drs-wrap {
+  padding: 12px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Track nền — thanh xám ngang */
+.drs-track {
+  position: relative;
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  cursor: pointer; /* Click trên track để di chuyển thumb gần nhất */
+}
+
+/* Fill cam — phần được chọn giữa 2 thumb, width/left set bằng JS */
+.drs-fill {
+  position: absolute;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 4px;
+  pointer-events: none; /* Không chặn click lên track */
+}
+
+/* Vùng touch thumb — rộng hơn thumb-inner để dễ grab trên mobile */
+.drs-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%); /* Căn giữa trên track */
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  z-index: 2;
+}
+.drs-thumb:active,
+.drs-thumb.active {
+  cursor: grabbing;
+}
+
+/* Hình tròn hiển thị của thumb — trắng viền cam */
+.drs-thumb-inner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid var(--primary);
+  box-shadow: 0 2px 6px rgba(232, 93, 4, 0.35);
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s;
+}
+/* Phóng to + glow khi hover/drag thumb */
+.drs-thumb:hover .drs-thumb-inner,
+.drs-thumb.active .drs-thumb-inner {
+  transform: scale(1.3);
+  box-shadow: 0 3px 12px rgba(232, 93, 4, 0.5);
+}

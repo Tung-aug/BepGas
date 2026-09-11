@@ -1,0 +1,536 @@
+/* =======================================================
+   SECTIONS — Khối nội dung lặp lại trên trang chủ
+   Mỗi section là 1 vùng độc lập với padding dọc riêng
+======================================================= */
+
+/* Section thông thường — padding dọc lớn tạo khoảng thở */
+.section {
+  padding: 5rem 0;
+}
+/* Section nền xám — xen kẽ với section trắng để phân biệt vùng */
+.section-gray {
+  background: var(--bg-gray);
+}
+
+/* Header của mỗi section: tiêu đề trái + link "Xem tất cả" phải */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+/* Tiêu đề section — viền trái cam (pseudo-element ::before) */
+.section-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--secondary);
+  position: relative; /* Anchor cho ::before */
+  padding-left: 1rem; /* Chỗ cho thanh cam dọc */
+}
+/* Thanh cam dọc bên trái tiêu đề — gradient từ cam nhạt đến đậm */
+.section-header h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%); /* Căn giữa dọc với text */
+  width: 4px;
+  height: 70%;
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  border-radius: 4px;
+}
+
+/* Link "Xem tất cả →" bên phải section header */
+.see-all {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.see-all:hover {
+  text-decoration: underline;
+}
+
+/* Tiêu đề section căn giữa — dùng cho phần đánh giá khách hàng */
+.text-center {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--secondary);
+}
+
+/* =======================================================
+   HERO BANNER — Phần đầu trang chủ full-width
+   Ảnh nền (Unsplash) + gradient tối trái → trong suốt phải
+   để chữ bên trái dễ đọc trên nền ảnh bếp
+======================================================= */
+
+/* Khối hero — chiều cao tối thiểu 560px, ảnh phủ kín */
+.hero {
+  width: 100%;
+  min-height: 560px;
+  background:
+    /* Gradient tối che nửa trái — nền cho chữ trắng */
+    linear-gradient(to right, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.25) 60%, transparent 100%),
+    url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1800&h=800&fit=crop') center/cover
+      no-repeat;
+  display: flex;
+  align-items: center; /* Căn chữ theo chiều dọc vào giữa hero */
+}
+/* Wrapper trong .hero — chứa khối chữ .hero-text */
+.hero-content {
+  display: flex;
+  align-items: center;
+}
+
+/* Khối chữ bên trái hero — giới hạn chiều rộng để không chiếm toàn hero */
+.hero-text {
+  max-width: 580px;
+  color: #fff;
+}
+/* Tagline nhỏ phía trên tiêu đề — cam nhạt, viết hoa, giãn chữ */
+.hero-text .hero-subtitle {
+  color: #fdba74; /* Cam nhạt nổi bật trên nền tối */
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 2px; /* Giãn chữ kiểu tagline marketing */
+  margin-bottom: 1rem;
+}
+/* Tiêu đề chính H1 — to nhất trang, bóng chữ tăng tương phản */
+.hero-text h1 {
+  font-size: 3.8rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); /* Bóng nhẹ giúp đọc rõ hơn */
+}
+/* Mô tả ngắn — trắng hơi mờ, dễ đọc */
+.hero-text p {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1.1rem;
+  line-height: 1.75;
+  margin-bottom: 2.25rem;
+}
+/* Hàng nút CTA — wrap khi màn hình nhỏ */
+.hero-btns {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Badge khuyến mãi pill — trắng trong suốt, viền trắng mờ */
+.hero-badge-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-size: 0.87rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 50px;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* Hàng trust nhỏ dưới nút CTA — vận chuyển, lắp đặt... */
+.hero-trust-row {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  font-size: 0.87rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+/* Ẩn cột ảnh bổ sung — hero đã dùng ảnh nền CSS rồi */
+.hero-image {
+  display: none;
+}
+
+/* =======================================================
+   TRUST BADGES — 4 điểm mạnh của cửa hàng
+   Nền gradient cam nhạt, icon tròn cam nổi bật
+======================================================= */
+
+/* Section trust — nền gradient cam nhạt, viền trên/dưới cam mờ */
+.trust-section {
+  background: linear-gradient(135deg, #fff7f0 0%, #ffffff 60%, #fff3ed 100%);
+  padding: 3rem 0;
+  border-top: 1px solid rgba(232, 93, 4, 0.1);
+  border-bottom: 1px solid rgba(232, 93, 4, 0.1);
+}
+/* Grid 4 cột đều nhau */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+/* Từng item — xếp dọc, căn giữa */
+.trust-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+  color: var(--text);
+}
+/* Vòng tròn icon cam — nhấc lên và đổ bóng cam khi hover */
+.trust-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary); /* Nền cam đậm */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+  transition:
+    transform 0.22s,
+    box-shadow 0.22s;
+}
+.trust-item:hover .trust-icon-wrap {
+  transform: translateY(-3px); /* Nhấc lên nhẹ */
+  box-shadow: 0 8px 20px rgba(232, 93, 4, 0.25); /* Glow cam bên dưới */
+}
+/* Tiêu đề trust item */
+.trust-item h4 {
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.3rem;
+}
+/* Mô tả ngắn */
+.trust-item p {
+  font-size: 0.87rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* =======================================================
+   LƯỚI DANH MỤC SẢN PHẨM
+======================================================= */
+
+/* Grid danh mục cũ — 5 cột trên desktop */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+}
+
+/* Grid danh mục mới (trang chủ) — có emoji lớn, 4 cột */
+.home-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 1280px) {
+  .home-cat-grid {
+    grid-template-columns: repeat(4, 1fr); /* Giữ nguyên 4 cột */
+  }
+}
+@media (max-width: 768px) {
+  .home-cat-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cột trên mobile */
+  }
+}
+
+/* Card danh mục mới — emoji + tên, hover nâng lên + viền cam */
+.home-cat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.5rem 1rem;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+  text-align: center;
+}
+.home-cat-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light); /* Nền cam nhạt */
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(232, 93, 4, 0.15);
+}
+/* Emoji biểu tượng danh mục — phóng to + xoay nhẹ khi hover */
+.home-cat-emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+  transition: transform 0.25s;
+}
+.home-cat-card:hover .home-cat-emoji {
+  transform: scale(1.2) rotate(-5deg);
+}
+/* Tên danh mục dưới emoji */
+.home-cat-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+/* Card danh mục kiểu cũ (không emoji) — viền dày hơn, padding lớn hơn */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem 1rem;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--secondary);
+  transition: all 0.22s;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+/* Thanh cam dọc xuất hiện phía trên card khi hover */
+.category-card::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 99px;
+  margin-bottom: 0.25rem;
+  opacity: 0; /* Ẩn mặc định, hiện khi hover */
+  transition: opacity 0.22s;
+}
+.category-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+  transform: translateY(-4px); /* Nhấc lên khi hover */
+  box-shadow: var(--shadow-hover);
+}
+/* Hiện thanh cam khi hover */
+.category-card:hover::before {
+  opacity: 1;
+}
+
+/* =======================================================
+   LƯỚI SẢN PHẨM — Dùng chung trang chủ và trang danh sách
+======================================================= */
+
+/* 4 cột đều nhau trên desktop */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+/* =======================================================
+   PRODUCT CARD — Thẻ hiển thị 1 sản phẩm
+======================================================= */
+
+/* Card sản phẩm — flex column để đẩy nút xuống đáy */
+.product-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; /* Bo góc cắt ảnh */
+  position: relative; /* Anchor cho badge, wishlist */
+  transition:
+    box-shadow 0.25s,
+    transform 0.25s;
+  display: flex;
+  flex-direction: column; /* Ảnh + info xếp dọc */
+}
+.product-card:hover {
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.13);
+  transform: translateY(-6px); /* Nhấc lên 6px khi hover */
+  border-color: var(--primary);
+}
+
+/* Nhãn góc trên trái: "Bán chạy", "Mới", "Hot"... */
+.product-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 50px;
+  z-index: 1; /* Trên ảnh */
+}
+
+/* Nút tim yêu thích — góc trên phải, tròn trắng */
+.wishlist-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: #fff;
+  color: var(--text-light);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  transition:
+    color 0.2s,
+    transform 0.2s;
+}
+.wishlist-btn:hover {
+  color: #ef4444; /* Đỏ khi hover — mượn liên tưởng phổ biến "tim đỏ = yêu thích/đã lưu" (như
+                     nút like Facebook/Instagram), khác hẳn ý nghĩa "đỏ = lỗi/xóa" ở các nơi khác
+                     trong site vì ngữ cảnh icon trái tim đã đủ rõ, không gây hiểu lầm */
+  transform: scale(1.1);
+}
+
+/* Khung ảnh — tỉ lệ 4:3 cố định bằng aspect-ratio */
+.product-img-wrap {
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+.product-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Crop giữ tỉ lệ, không méo */
+  transition: transform 0.35s;
+}
+/* Ảnh zoom nhẹ khi hover card */
+.product-card:hover .product-img-wrap img {
+  transform: scale(1.06);
+}
+
+/* Phần thông tin dưới ảnh — flex:1 để đẩy nút xuống đáy */
+.product-info {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Chiếm phần còn lại để các card đều chiều cao */
+}
+/* Tên sản phẩm — giới hạn 2 dòng + chiều cao cố định
+   để giá luôn thẳng hàng dù tên dài ngắn khác nhau */
+.product-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: 0.4rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Tối đa 2 dòng */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.45;
+  min-height: calc(1.45em * 2); /* Chiếm đúng 2 dòng dù tên ngắn */
+}
+.product-name:hover {
+  color: var(--primary);
+}
+
+/* Hàng đánh giá sao */
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.87rem;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+/* Số lượt đánh giá — xám nhạt */
+.review-count {
+  color: var(--text-light);
+}
+
+/* Hàng giá — flex column: dòng 1 giá+gốc, dòng 2 % giảm
+   margin-top:auto đẩy giá xuống dưới tên+sao, giữ layout đều */
+.product-price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.85rem;
+  margin-top: auto; /* Đẩy xuống đáy phần info */
+}
+/* Hàng 1: giá hiện tại + giá gốc gạch ngang */
+.price-row-1 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+/* Giá hiện tại — cam đậm, to nhất */
+.price-current {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 1.05rem;
+}
+/* Giá gốc — xám, gạch ngang */
+.price-original {
+  color: var(--text-light);
+  font-size: 0.87rem;
+  text-decoration: line-through;
+  margin-top: 0.1rem;
+}
+/* % giảm giá — nền đỏ nhạt #fef2f2, chữ đỏ #ef4444 (kích thích thị giác). CHỦ Ý không dùng cam
+   thương hiệu ở đây dù đang ở ngữ cảnh "giá/khuyến mãi" (lẽ ra hợp với --primary) — vì mục đích
+   của badge này là tạo cảm giác "khẩn cấp/giảm sốc" để thúc đẩy mua ngay, đỏ tạo hiệu ứng tâm lý
+   mạnh hơn cam trong các badge sale (giống quy ước phổ biến trên Shopee/Lazada). */
+.price-discount {
+  color: #ef4444;
+  font-size: 0.87rem;
+  font-weight: 700;
+  background: #fef2f2;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Nút "Thêm vào giỏ" dưới cùng card — full width */
+.add-to-cart-btn {
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: background 0.2s;
+}
+.add-to-cart-btn:hover {
+  background: var(--primary-dark);
+}
+/* Biến thể lớn — dùng trong trang chi tiết sản phẩm */
+.add-to-cart-btn.large {
+  padding: 0.9rem 1.75rem;
+  font-size: 1rem;
+  width: auto;
+}
+/* Nút chuyển xanh lá #10b981 khi vừa thêm vào giỏ — đổi tạm thời sang xanh lá (thay vì giữ cam)
+   để xác nhận RÕ RÀNG hành động vừa thành công, đúng quy ước "xanh lá = thành công" dùng nhất
+   quán toàn site (.free-shipping trong cart.css, .tl-step.done trong order-card.css) — nếu giữ
+   nguyên màu cam thì khách khó nhận biết nút đã được bấm hay chưa. */
+.add-to-cart-btn.added {
+  background: #10b981;
+}
+/* Nút disabled khi hết hàng — xám, không cho click */
+.add-to-cart-btn:disabled,
+.add-to-cart-btn[disabled] {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.add-to-cart-btn:disabled:hover {
+  background: #e5e7eb;
+}

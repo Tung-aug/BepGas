@@ -1,0 +1,1568 @@
+/* =======================================================
+   GROUPED LINK DROPDOWN — Dropdown chọn link theo nhóm
+   Dùng khi gán link đích cho banner, có ô tìm kiếm nhanh
+======================================================= */
+
+/* Nút trigger mở dropdown — full width, viền cam khi mở */
+.link-dd-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.46rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: left;
+  transition: border-color 0.15s;
+}
+.link-dd-trigger:hover,
+.link-dd-trigger.open {
+  border-color: var(--primary);
+}
+/* Giá trị đang chọn */
+.link-dd-value {
+  color: var(--text);
+  flex: 1;
+}
+/* Placeholder khi chưa chọn — in nghiêng xám */
+.link-dd-placeholder {
+  color: var(--text-light);
+  flex: 1;
+  font-style: italic;
+}
+
+/* Panel dropdown — nổi tuyệt đối dưới trigger */
+.link-dd-panel {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+  z-index: 400;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+/* Ô tìm kiếm sticky trong panel */
+.link-dd-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1; /* Nổi trên list khi scroll */
+}
+.link-dd-search input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 0.88rem;
+  background: transparent;
+}
+
+/* Nhóm item trong dropdown (Sản phẩm, Danh mục, Thương hiệu...) */
+.link-dd-group {
+  border-bottom: 1px solid var(--bg-gray);
+}
+.link-dd-group:last-child {
+  border-bottom: none;
+}
+/* Nhãn tên nhóm — sticky dưới search bar */
+.link-dd-group-label {
+  padding: 0.32rem 0.75rem 0.18rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  background: var(--bg-gray);
+  position: sticky;
+  top: 41px; /* Chiều cao ô search = 41px */
+}
+
+/* Từng item trong dropdown */
+.link-dd-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.44rem 0.75rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.85rem;
+  color: var(--text);
+  transition: background 0.1s;
+  border-bottom: 1px solid transparent;
+}
+.link-dd-item:hover {
+  background: #fff8f5;
+}
+/* Item đang được chọn — cam nhạt, chữ đậm cam */
+.link-dd-item.active {
+  background: #fff3ed;
+  color: var(--primary);
+  font-weight: 600;
+}
+.link-dd-item span {
+  flex: 1;
+}
+/* Chip URL nhỏ — monospace, nền cam nhạt */
+.link-dd-item code {
+  font-size: 0.78rem;
+  color: var(--primary);
+  background: #fff3ed;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-family: monospace;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.link-dd-item.active code {
+  background: rgba(255, 255, 255, 0.6);
+}
+/* Mô tả ngắn bên phải — xám nghiêng */
+.link-dd-item-desc {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  flex-shrink: 0;
+  font-style: italic;
+}
+.link-dd-item.active .link-dd-item-desc {
+  color: rgba(255, 120, 50, 0.7);
+}
+
+/* Nhóm hành động đặc biệt (Custom URL, Xóa...) */
+.link-dd-actions {
+  background: #fafafa;
+}
+/* Item đặc biệt — xám nghiêng, hover cam */
+.link-dd-special {
+  color: var(--text-light) !important;
+  font-style: italic;
+}
+.link-dd-special:hover {
+  color: var(--primary) !important;
+  background: #fff8f5 !important;
+}
+
+/* ── SWITCH TOGGLE (Dùng chung admin form) ── */
+
+/* Toggle on/off — click cả label để bật/tắt */
+.ui-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+/* Track (nền thanh trượt) — xám khi off, cam khi on */
+.ui-switch-track {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 99px; /* Pill hoàn toàn */
+  background: #cbd5e1; /* Xám khi off */
+  transition: background 0.22s;
+}
+.ui-switch-track.on {
+  background: var(--primary); /* Cam khi on */
+}
+/* Thumb tròn trượt trong track */
+.ui-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px; /* Vị trí off */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: left 0.22s;
+}
+.ui-switch-track.on .ui-switch-thumb {
+  left: 23px; /* Vị trí on = 46 - 20 - 3 = 23px */
+}
+/* Text trạng thái bên cạnh switch */
+.ui-switch-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-width: 68px; /* Giữ chiều rộng ổn định khi text thay đổi */
+}
+.ui-switch-label.on {
+  color: var(--primary);
+}
+.ui-switch-label.off {
+  color: var(--text-light);
+}
+
+/* ── SIDEBAR BANNER GRID (Lưới banner sidebar trang chủ) ── */
+
+/* Grid tự động: 1 banner = full, 2 = nửa nửa, 3+ = minmax 220px */
+.home-sb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+/* Banner item — tỷ lệ 4:3 chuẩn sidebar */
+.home-sb-item {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3; /* Giữ tỷ lệ 400×300 sidebar */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.09);
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+.home-sb-item:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
+}
+.home-sb-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.home-sb-item:hover img {
+  transform: scale(1.03);
+}
+
+/* ═════════════════════════════════════════════════════════��
+   HOME FEATURED LAYOUT — Sidebar ads dọc + lưới sản phẩm
+   Cột trái 240px quảng cáo, cột phải lưới sản phẩm 2 cột
+══════════════════════════════════════════════════════════ */
+
+/* Grid layout: ads cố định 240px + lưới linh hoạt */
+.home-featured-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Cột quảng cáo dọc — sticky khi scroll */
+.home-sidebar-ads {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 90px; /* Dính lại khi cuộn, dưới header sticky */
+}
+
+/* Từng banner quảng cáo sidebar */
+.home-sidebar-ad-item {
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition:
+    box-shadow 0.22s,
+    transform 0.22s;
+  background: var(--bg-gray); /* Nền placeholder khi ảnh tải */
+}
+.home-sidebar-ad-item:hover {
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.13);
+  transform: translateY(-2px);
+}
+.home-sidebar-ad-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Tablet: thu sidebar ads từ 240px xuống 200px */
+@media (max-width: 1024px) {
+  .home-featured-layout {
+    grid-template-columns: 200px 1fr;
+    gap: 16px;
+  }
+}
+/* Mobile: sidebar ads nằm ngang cuộn, sản phẩm xuống dưới */
+@media (max-width: 768px) {
+  .home-featured-layout {
+    grid-template-columns: 1fr;
+  }
+  .home-sidebar-ads {
+    flex-direction: row; /* Ngang, cuộn ngang */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* Ẩn scrollbar */
+    position: static; /* Bỏ sticky trên mobile */
+    gap: 10px;
+  }
+  .home-sidebar-ads::-webkit-scrollbar {
+    display: none;
+  }
+  .home-sidebar-ad-item {
+    flex: 0 0 180px; /* Mỗi ad rộng cố định khi cuộn ngang */
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   BRAND GRID — Lưới logo thương hiệu trang chủ
+   6 ô đều nhau, logo grayscale → màu khi hover
+══════════════════════════════════════════════════════════ */
+
+/* Bỏ padding top section */
+.section-brand {
+  padding-top: 0 !important;
+}
+
+/* 6 cột đều nhau trên desktop */
+.home-brand-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+
+/* Card thương hiệu — hover nâng + viền cam */
+.home-brand-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px 14px 18px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--secondary);
+  cursor: pointer;
+  transition:
+    border-color 0.22s,
+    box-shadow 0.22s,
+    transform 0.22s;
+}
+.home-brand-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px rgba(232, 93, 4, 0.18);
+  transform: translateY(-4px);
+}
+
+/* Vùng chứa logo — kích thước cố định để căn đều */
+.home-brand-logo-wrap {
+  width: 84px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Logo hơi xám mặc định — màu đầy đủ khi hover */
+.home-brand-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(20%); /* Hơi xám để không lòe loẹt */
+  transition: filter 0.22s;
+}
+.home-brand-card:hover .home-brand-logo {
+  filter: grayscale(0%); /* Màu đầy đủ khi hover */
+}
+
+/* Fallback khi không có logo — vòng tròn chữ cái đầu */
+.home-brand-initial {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+/* Tên thương hiệu bên dưới logo */
+.home-brand-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-align: center;
+  transition: color 0.2s;
+}
+.home-brand-card:hover .home-brand-name {
+  color: var(--primary);
+}
+
+/* Responsive lưới thương hiệu */
+@media (max-width: 1024px) {
+  .home-brand-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 cột tablet */
+  }
+}
+@media (max-width: 600px) {
+  .home-brand-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 cột mobile */
+    gap: 10px;
+  }
+  .home-brand-logo-wrap {
+    width: 64px;
+    height: 40px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   ARTICLES / CẨM NANG NHÀ BẾP — Lưới bài viết trang chủ
+══════════════════════════════════════════════════════════ */
+
+/* Grid 3 cột bài viết */
+.home-articles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+/* Card bài viết — hover nâng + viền cam */
+.home-article-card {
+  border-radius: 12px;
+  overflow: hidden; /* Bo góc cắt ảnh */
+  background: #fff;
+  border: 1.5px solid var(--border);
+  transition:
+    box-shadow 0.25s,
+    transform 0.25s,
+    border-color 0.25s;
+  cursor: pointer;
+}
+.home-article-card:hover {
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-5px);
+  border-color: var(--primary);
+}
+/* Ảnh bài viết — tỷ lệ 16:9, zoom nhẹ khi hover */
+.home-article-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.home-article-card:hover .home-article-img {
+  transform: scale(1.06);
+}
+/* Body card bài viết */
+.home-article-body {
+  padding: 1.1rem 1.25rem 1.4rem;
+}
+/* Ngày đăng — xám nhỏ */
+.home-article-date {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-bottom: 0.55rem;
+  display: flex;
+  align-items: center;
+}
+/* Tiêu đề bài — 2 dòng, cắt "..." */
+.home-article-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--secondary);
+  line-height: 1.45;
+  margin-bottom: 0.6rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Tóm tắt — 2 dòng */
+.home-article-excerpt {
+  font-size: 0.86rem;
+  color: var(--text-light);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+/* Link "Đọc thêm →" */
+.home-article-link {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+/* Responsive lưới bài viết */
+@media (max-width: 900px) {
+  .home-articles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .home-articles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   BRANDS PAGE — Trang danh sách thương hiệu
+══════════════════════════════════════════════════════════ */
+
+/* Hero header trang thương hiệu */
+.brands-hero {
+  background: var(--bg-gray);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 0 2.25rem;
+}
+/* Breadcrumb "Trang chủ > Thương hiệu" */
+.brands-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.83rem;
+  color: var(--text-light);
+  margin-bottom: 1.1rem;
+}
+.brands-breadcrumb a {
+  color: var(--primary);
+}
+.brands-breadcrumb a:hover {
+  text-decoration: underline;
+}
+/* Hàng tiêu đề + ô tìm kiếm */
+.brands-hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.brands-hero-inner h1 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--secondary);
+  margin-bottom: 0.3rem;
+}
+.brands-hero-inner > div > p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* Ô tìm kiếm thương hiệu — pill, viền cam khi focus */
+.brands-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 260px;
+}
+/* Icon search cố định trái */
+.brands-search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-light);
+  pointer-events: none;
+}
+.brands-search-input {
+  width: 100%;
+  padding: 0.65rem 2.8rem 0.65rem 2.6rem;
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  background: #fff;
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.brands-search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.1);
+}
+/* Nút X xóa tìm kiếm */
+.brands-search-clear {
+  position: absolute;
+  right: 12px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.brands-search-clear:hover {
+  color: var(--secondary);
+}
+
+/* Body trang thương hiệu */
+.brands-body {
+  padding: 2.5rem 0 5rem;
+}
+
+/* Nhóm theo chữ cái (A, B, C...) */
+.brands-group {
+  margin-bottom: 2.5rem;
+}
+/* Chữ cái lớn — cam, gạch chân cam */
+.brands-group-letter {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.4rem;
+  margin-bottom: 1.1rem;
+  display: inline-block;
+  min-width: 36px;
+  text-align: center;
+}
+
+/* Grid thương hiệu — 4 cột desktop */
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+/* Card thương hiệu trong trang brands */
+.brand-page-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 18px 18px;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--text);
+  transition:
+    border-color 0.22s,
+    box-shadow 0.22s,
+    transform 0.22s;
+  cursor: pointer;
+}
+.brand-page-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px rgba(232, 93, 4, 0.13);
+  transform: translateY(-5px);
+}
+/* Vùng logo — kích thước cố định */
+.bpc-logo-wrap {
+  width: 120px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.bpc-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(15%);
+  transition: filter 0.22s;
+}
+.brand-page-card:hover .bpc-logo {
+  filter: grayscale(0%);
+}
+/* Fallback chữ cái đầu */
+.bpc-initial {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+/* Tên + mô tả thương hiệu */
+.bpc-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+.bpc-name {
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: var(--secondary);
+  transition: color 0.2s;
+}
+.brand-page-card:hover .bpc-name {
+  color: var(--primary);
+}
+/* Mô tả — 2 dòng cắt "..." */
+.bpc-desc {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Link "Xem sản phẩm →" */
+.bpc-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: auto;
+}
+/* Skeleton loading card */
+.brand-skeleton {
+  pointer-events: none;
+}
+
+/* Responsive trang thương hiệu */
+@media (max-width: 1024px) {
+  .brands-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .brands-hero-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .brands-search-wrap {
+    width: 100%;
+    min-width: unset;
+  }
+  .brands-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .bpc-logo-wrap {
+    width: 90px;
+    height: 54px;
+  }
+}
+@media (max-width: 480px) {
+  .brands-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .brand-page-card {
+    padding: 16px 12px;
+  }
+}
+
+/* ── TARGET PAGE DROPDOWN (Multi-select checkbox) ── */
+
+/* Wrapper — relative cho dropdown tuyệt đối */
+.tp-wrap {
+  position: relative;
+}
+/* Nút trigger — hiển thị các tag trang đã chọn */
+.tp-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 40px;
+  padding: 5px 10px 5px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s;
+}
+.tp-trigger:hover,
+.tp-trigger.open {
+  border-color: var(--primary);
+}
+.tp-trigger-disabled {
+  opacity: 0.65;
+  cursor: default;
+  background: #f8fafc;
+}
+.tp-trigger-disabled:hover {
+  border-color: var(--border);
+}
+/* Hàng tag các trang đã chọn */
+.tp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1;
+}
+/* Tag mỗi trang cụ thể (VD: "Trang chủ", "Trang sản phẩm") — nền xanh dương rất nhạt #eff6ff để
+   phân biệt với tag "Toàn site" bên dưới, chữ vẫn dùng var(--primary) (cam) vì đây là thông tin
+   do admin chủ động chọn (không phải trạng thái hệ thống) — giữ tông cam để nhất quán các tag
+   lựa chọn khác trong toàn bộ phần admin banner (.link-selected-tag, .banner-pos-card.active...). */
+.tp-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 99px;
+  background: #eff6ff;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+/* Tag "Toàn site" — xanh lá #16a34a thay vì cam, để TÁCH BIỆT rõ với tag trang cụ thể ở trên:
+   đây không phải 1 trang trong nhiều trang được chọn, mà là phạm vi đặc biệt "áp dụng tất cả",
+   xanh lá gợi ý "bao trùm/toàn diện" giống cách dùng ở các badge trạng thái "đã bật" khác. */
+.tp-tag-global {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+/* Chevron mũi tên — xoay khi mở */
+.tp-chevron {
+  flex-shrink: 0;
+  color: var(--text-light);
+  transition: transform 0.2s;
+}
+.tp-trigger.open .tp-chevron {
+  transform: rotate(180deg);
+}
+/* Panel dropdown đa chọn */
+.tp-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 500;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.13);
+  overflow: hidden;
+}
+/* Từng trang trong panel */
+.tp-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.tp-item + .tp-item {
+  border-top: 1px solid var(--border-light, #f1f5f9);
+}
+.tp-item:hover {
+  background: #f8fafc;
+}
+.tp-item input[type='checkbox'] {
+  margin-top: 3px;
+  accent-color: var(--primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+/* Cột tên + mô tả trang, cạnh checkbox */
+.tp-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+/* Tên trang (VD: "Trang chủ") */
+.tp-item-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+}
+/* Mô tả ngắn dưới tên trang */
+.tp-item-desc {
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+/* Item mờ — trang không khả dụng */
+.tp-item.tp-item-dim {
+  opacity: 0.35;
+  pointer-events: none;
+}
+/* Nút xóa lựa chọn — đỏ */
+.link-dd-clear {
+  color: #ef4444 !important;
+}
+.link-dd-clear:hover {
+  background: #fef2f2 !important;
+}
+
+/* =======================================================
+   LINK PICKER 2 BƯỚC — Chọn loại trang rồi chọn mục cụ thể
+   Bước 1: chọn type (Sản phẩm / Danh mục / Thương hiệu...)
+   Bước 2: tìm và chọn item cụ thể trong type đó
+======================================================= */
+
+/* Tag hiển thị mục đã chọn — cam nhạt, có nút X xóa */
+.link-selected-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.65rem;
+  margin-bottom: 0.4rem;
+  background: #fff3ed;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  color: var(--text);
+}
+.link-selected-tag span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.link-selected-tag code {
+  color: var(--primary);
+}
+.link-selected-tag button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.link-selected-tag button:hover {
+  color: #ef4444;
+}
+
+/* Ô tìm kiếm sản phẩm/danh mục... */
+.link-product-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.42rem 0.75rem;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+.link-product-search:focus-within {
+  border-color: var(--primary);
+}
+.link-product-search input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 0.9rem;
+  background: transparent;
+  padding: 0;
+}
+
+/* Danh sách kết quả tìm kiếm */
+.link-product-results {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-height: 240px;
+  overflow-y: auto;
+  margin-top: 0.3rem;
+}
+/* Từng item kết quả */
+.link-product-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-bottom: 1px solid var(--bg-gray);
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+.link-product-item:last-child {
+  border-bottom: none;
+}
+.link-product-item:hover {
+  background: #fff8f5;
+}
+/* Tên item */
+.link-product-name {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.3;
+}
+/* URL nhỏ bên dưới tên */
+.link-product-url {
+  font-size: 0.8rem;
+  color: var(--primary);
+  margin-top: 0.1rem;
+  font-family: monospace;
+}
+
+/* =======================================================
+   SCROLL BANNER ROW — Hàng banner cuộn ngang (sbs-*)
+   Mỗi item cuộn ngang kèm mũi tên prev/next và chấm dots
+======================================================= */
+
+/* Section wrapper */
+.scroll-banner-section {
+  padding: 1rem 0 1.25rem;
+  background: #fff;
+}
+/* Wrapper ngoài — relative cho mũi tên tuyệt đối */
+.sbs-wrapper {
+  position: relative;
+}
+/* Viewport — overflow:hidden cắt các item chưa hiện */
+.sbs-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+/* Track cuộn — transform dịch khi slide */
+.sbs-track {
+  display: flex;
+  gap: 12px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform; /* Hint GPU optimization */
+}
+/* Từng banner item */
+.sbs-item {
+  flex-shrink: 0; /* Không co lại */
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  background: #f3f4f6; /* Placeholder khi tải */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+/* Link bao toàn bộ ảnh — tỷ lệ 8:3 cố định */
+.sbs-link {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 8 / 3; /* Giữ tỷ lệ mà không cần height cố định */
+  border-radius: inherit;
+}
+.sbs-link img {
+  width: 100%;
+  height: 100%; /* Lấp đầy khung aspect-ratio */
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.sbs-link:hover img {
+  transform: scale(1.02);
+}
+/* Caption gradient tối dưới cùng mỗi slide */
+.sbs-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.55)); /* Tối dần từ trên xuống */
+  color: #fff;
+  padding: 1rem 0.85rem 0.65rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* Mũi tên prev/next — tròn trắng mờ */
+.sbs-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
+  z-index: 2;
+}
+.sbs-arrow:hover {
+  background: #fff;
+}
+.sbs-arrow:disabled {
+  opacity: 0.35; /* Mờ khi ở slide đầu/cuối */
+  cursor: default;
+}
+/* Vị trí mũi tên — nhô ra ngoài wrapper một chút */
+.sbs-prev {
+  left: -14px;
+}
+.sbs-next {
+  right: -14px;
+}
+
+/* Chấm điều hướng bên dưới */
+.sbs-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 0.75rem;
+}
+.sbs-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: none;
+  background: #d1d5db;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+/* Chấm active — cam, phóng to */
+.sbs-dot.active {
+  background: var(--primary);
+  transform: scale(1.35);
+}
+@media (max-width: 768px) {
+  .sbs-item {
+    border-radius: 10px;
+  }
+  .sbs-prev {
+    left: -6px;
+  }
+  .sbs-next {
+    right: -6px;
+  }
+}
+
+/* =======================================================
+   ADMIN — PAGE PICKER (Thẻ chọn trang hiển thị banner)
+   Grid 3 cột, click để chọn trang nào banner sẽ xuất hiện
+======================================================= */
+
+/* Grid 3 cột đều nhau */
+.banner-page-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+/* Thẻ từng trang — active viền cam, nền cam nhạt */
+.banner-page-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.8rem 0.5rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.banner-page-card:hover {
+  border-color: var(--primary);
+  background: #fff8f5;
+}
+.banner-page-card.active {
+  border-color: var(--primary);
+  background: #fff3ed;
+}
+
+/* =======================================================
+   ADMIN — BANNER SECTION (Card-based layout theo vị trí)
+   Mỗi section là 1 vị trí (Hero, Scroll, Sidebar, Popup...)
+======================================================= */
+
+/* Khung section — trắng, viền xám, bo góc */
+.ab-section {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+
+/* Header section: tiêu đề + gợi ý + nút thêm */
+.ab-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-gray);
+  gap: 1rem;
+}
+/* Nhóm tiêu đề + gợi ý */
+.ab-section-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.ab-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+/* Gợi ý kích thước banner */
+.ab-section-hint {
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+/* Nhóm phải: đếm số lượng + nút thêm */
+.ab-section-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+/* Badge số lượng banner */
+.ab-section-count {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  background: var(--border);
+  padding: 0.2rem 0.55rem;
+  border-radius: 99px;
+  font-weight: 600;
+}
+/* Nút "Thêm banner" nhỏ gọn */
+.ab-btn-add {
+  padding: 0.35rem 0.85rem !important;
+  font-size: 0.82rem !important;
+  gap: 0.3rem !important;
+}
+
+/* Trạng thái section trống */
+.ab-empty-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2.5rem 1rem;
+  color: var(--text-light);
+}
+.ab-empty-section p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+/* Nút thêm đầu tiên — viền chấm */
+.ab-empty-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.38rem 0.85rem;
+  border: 1.5px dashed var(--border);
+  border-radius: 8px;
+  background: none;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ab-empty-add-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+
+/* Danh sách card banner trong section */
+.ab-card-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem;
+  gap: 0.5rem;
+}
+
+/* Card từng banner — hàng ngang: drag | thumb | info | actions */
+.ab-banner-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  transition:
+    box-shadow 0.15s,
+    border-color 0.15s;
+  cursor: default;
+}
+.ab-banner-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.08);
+}
+/* Card đang kéo — mờ + bóng đậm */
+.ab-card-dragging {
+  opacity: 0.55;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  border-color: var(--primary) !important;
+  z-index: 999;
+}
+
+/* Tay cầm kéo thứ tự banner */
+.ab-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  color: #cbd5e1; /* Xám mờ mặc định */
+  cursor: grab;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  touch-action: none; /* Tắt scroll khi drag trên mobile */
+}
+.ab-drag-handle:hover {
+  color: var(--text-light);
+  background: var(--bg-gray);
+}
+.ab-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Thumbnail preview banner — 160px đủ rõ tỷ lệ */
+.ab-card-thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 160px;
+  min-height: 50px; /* Đảm bảo không quá dẹt */
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-gray);
+}
+.ab-card-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 42px;
+}
+
+/* Badge "Hết hàng" — đỏ mờ góc thumbnail */
+.ab-oos-badge {
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(239, 68, 68, 0.92);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  pointer-events: none;
+  line-height: 1.4;
+}
+
+/* Vùng thông tin banner — tên + meta + badge */
+.ab-card-info {
+  flex: 1;
+  min-width: 0; /* Cho phép text-overflow */
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+/* Tên banner — cắt "..." */
+.ab-card-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Meta: link + thời gian */
+.ab-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Chip URL nhỏ */
+.ab-card-link {
+  font-size: 0.78rem;
+  color: var(--primary);
+  background: rgba(234, 88, 12, 0.07);
+  padding: 1px 5px;
+  border-radius: 4px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* Gợi ý ngày hết hạn */
+.ab-date-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+/* Hàng badge trạng thái */
+.ab-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+/* Nút hành động (Sửa, Xóa) */
+.ab-card-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+/* Màu badge bổ sung */
+.badge-red {
+  background: #fee2e2;
+  color: #dc2626;
+}
+/* Badge cảnh báo vàng — có icon */
+.badge-yellow {
+  background: #fef9c3;
+  color: #b45309;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Nút toggle bật/tắt banner — pill nhỏ trên card */
+.ab-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.18rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+/* Đang bật — xanh lá, đúng quy ước "xanh lá = đang hoạt động/tích cực" dùng nhất quán toàn site
+   (giống .free-shipping trong cart.css, .tl-step.done trong order-card.css). Đang tắt thì dùng
+   xám trung tính (không phải đỏ) vì "tắt banner" không phải lỗi/nguy hiểm, chỉ là 1 trạng thái
+   bình thường khác — dùng đỏ ở đây sẽ khiến admin hiểu lầm là cần xử lý gấp. */
+.ab-toggle-on {
+  background: #dcfce7;
+  color: #16a34a;
+  border-color: #bbf7d0;
+}
+/* Đang tắt — xám */
+.ab-toggle-off {
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+.ab-toggle-on:hover {
+  background: #bbf7d0;
+  border-color: #86efac;
+}
+.ab-toggle-off:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+/* Mobile: thu thumbnail, wrap section header */
+@media (max-width: 640px) {
+  .ab-card-thumb {
+    width: 72px; /* Thu nhỏ trên mobile */
+  }
+  .ab-card-link {
+    max-width: 120px;
+  }
+  .ab-section-header {
+    flex-wrap: wrap;
+  }
+}
+
+/* =======================================================
+   ADMIN — POSITION PICKER (Thẻ chọn vị trí banner)
+   Danh sách dọc, click chọn 1 trong các vị trí có sẵn
+======================================================= */
+
+/* Danh sách vị trí — xếp dọc */
+.banner-pos-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+}
+/* Thẻ vị trí — icon + tên + mô tả + code */
+.banner-pos-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+  width: 100%;
+}
+.banner-pos-card:hover {
+  border-color: var(--primary);
+  background: #fff8f5;
+}
+/* Đang chọn — viền cam đậm, nền cam nhạt */
+.banner-pos-card.active {
+  border-color: var(--primary);
+  background: #fff3ed;
+}
+/* Thông tin vị trí: tên, mô tả, code */
+.banner-pos-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.banner-pos-info strong {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.banner-pos-info span {
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+/* Chip code vị trí — monospace nhỏ */
+.banner-pos-info code {
+  font-size: 0.78rem;
+  background: var(--bg-gray);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: var(--primary);
+  width: fit-content;
+  margin-top: 0.1rem;
+}

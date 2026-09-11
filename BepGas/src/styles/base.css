@@ -1,0 +1,260 @@
+﻿/* ── Google Fonts: Inter ──────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* =======================================================
+   RESET & BASE
+   Xóa toàn bộ margin/padding mặc định của trình duyệt
+   box-sizing: border-box — padding & border KHÔNG làm to thêm phần tử,
+   mà tính VÀO bên trong chiều rộng/cao đã khai báo
+======================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ẩn icon "hiện mật khẩu" mặc định của Edge/IE (::-ms-reveal) và nút xoá (::-ms-clear) —
+   trang đã có nút mắt riêng (toggle-password), không ẩn sẽ bị chồng 2 icon mắt cùng lúc. */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* =======================================================
+   BIẾN CSS TOÀN CỤC (:root)
+   Khai báo một lần ở đây, dùng var(--tên) ở mọi nơi.
+   Muốn đổi màu chủ đạo toàn trang → chỉ cần sửa --primary
+======================================================= */
+:root {
+  /* ── Bảng màu thương hiệu (brand) ──
+     --primary là màu DUY NHẤT đại diện cho thương hiệu BếpGas (cam — liên tưởng tới lửa/bếp
+     gas), dùng cho MỌI hành động tích cực/kêu gọi hành động (CTA): nút mua hàng, giá tiền, link
+     đang hover, badge nổi bật... Toàn bộ các file CSS khác trong src/styles đều tham chiếu lại
+     3 biến --primary/--primary-dark/--primary-light này thay vì khai hex riêng, để khi cần đổi
+     màu thương hiệu thì chỉ sửa đúng 1 chỗ ở đây. */
+  --primary: #e85d04; /* Cam chủ đạo — nút chính, giá tiền, badge nổi bật, trạng thái hover */
+  --primary-dark: #c44d00; /* Cam tối hơn — CHỈ dùng khi hover/active lên nền --primary, tạo
+                               phản hồi "đang nhấn" mà vẫn giữ liên tưởng thương hiệu (không đổi
+                               sang màu khác hẳn) */
+  --primary-light: #fff3ed; /* Cam rất nhạt — dùng làm NỀN (không phải chữ) khi cần tô sáng nhẹ
+                                1 khu vực liên quan tới thương hiệu mà không gắt như --primary
+                                đặc, ví dụ hover card danh mục, nền badge, nền ô đang chọn */
+
+  /* ── Màu trung tính (neutral) — dùng cho chữ/nền, KHÔNG mang ý nghĩa thương hiệu hay
+     trạng thái (đó là việc của --primary và các màu semantic như đỏ/xanh lá/vàng rải rác trong
+     từng file riêng cho lỗi/thành công/cảnh báo). ── */
+  --secondary: #0f172a; /* Navy đậm gần đen — dùng cho tiêu đề/heading và nền tối (header, footer,
+                            sidebar admin) vì độ tương phản cao hơn đen thuần, đỡ "gắt" mắt hơn
+                            mà vẫn rất dễ đọc trên nền trắng */
+  --text: #1a1f2e; /* Màu chữ nội dung thông thường — tối hơn --text-light 1 chút để là "chữ
+                       chính" trong phân cấp 2 tầng text/text-light */
+  --text-light: #4b5563; /* Chữ phụ/mô tả/placeholder/ngày tháng — xám nhạt hơn để tự nhiên
+                             "lùi" về sau, giúp mắt người đọc ưu tiên --text/--secondary trước */
+  --bg: #ffffff; /* Nền trắng — nền mặc định của card, modal, input */
+  --bg-gray: #f8fafc; /* Xám rất nhạt gần trắng — dùng xen kẽ với --bg để tách lớp các section/
+                          sidebar mà không cần kẻ viền, mắt vẫn nhận ra ranh giới */
+  --border: #e5e7eb; /* Viền xám nhạt cho card/input — đủ rõ để phân tách khối nhưng không tạo
+                         cảm giác "đóng khung" nặng nề như viền đen/đậm */
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* Bóng đổ rất nhẹ (alpha 8%) — trạng thái nghỉ của
+                                                card, tạo cảm giác "nổi" nhẹ trên nền */
+  --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.14); /* Bóng đậm + lan rộng hơn (alpha 14%) khi
+                                                       hover — mô phỏng card "nhô lên" gần người
+                                                       dùng hơn, tăng cảm giác tương tác được */
+  --radius: 12px; /* Bo góc lớn — card, modal: bo nhiều hơn để trông mềm mại, hiện đại */
+  --radius-sm: 8px; /* Bo góc nhỏ — nút, input, badge: bo ít hơn vì kích thước phần tử nhỏ, bo
+                        nhiều sẽ làm mất hình dạng chữ nhật, khó nhận biết là nút bấm được */
+
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; /* Font mặc định toàn trang */
+  font-size: 17px; /* Kích thước chữ gốc — rem tính từ đây */
+  font-weight: 450;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+}
+
+/* #root và .app trải full chiều cao màn hình,
+   dùng flex-direction: column để footer luôn ở cuối */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Reset thẻ link — bỏ gạch chân, kế thừa màu chữ từ cha */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Ảnh không tràn ra ngoài cha, hiển thị dạng block tránh khoảng trắng dưới */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Nút mặc định — bỏ viền/nền, kế thừa font */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* Input & select kế thừa font thay vì dùng font mặc định của trình duyệt */
+input,
+select {
+  font-family: inherit;
+}
+
+/* ── Accessibility: focus visible rõ ràng cho keyboard navigation ── */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+/* Bỏ outline khi dùng chuột */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── PageLoader — fallback khi lazy-load chunk ── */
+.page-loader {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Vòng tròn xoay: 4 cạnh đều màu var(--border) (xám nhạt) NGOẠI TRỪ cạnh trên đổi sang
+   var(--primary) (cam thương hiệu) — chính sự khác màu ở 1 cạnh duy nhất này tạo ra ảo giác
+   "đang quay" khi animation xoay cả vòng tròn; dùng màu thương hiệu ở đây để spinner loading
+   vẫn mang nhận diện BếpGas dù chỉ là 1 chi tiết nhỏ. */
+.page-loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+
+/* ── ErrorState — trạng thái lỗi / mất kết nối ── */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+/* Tiêu đề lỗi, ví dụ "Không tải được dữ liệu" */
+.error-state-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+/* Mô tả lỗi chi tiết — giới hạn chiều rộng để dễ đọc */
+.error-state-msg {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  max-width: 380px;
+  line-height: 1.6;
+  margin: 0;
+}
+/* Nút "Thử lại" */
+.error-state-retry {
+  margin-top: 0.25rem;
+}
+
+/* =======================================================
+   CONTAINER
+   Giới hạn chiều rộng nội dung tối đa 1400px, căn giữa màn hình.
+   Padding 2rem hai bên để tránh sát mép trên màn hình nhỏ
+======================================================= */
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  width: 100%;
+}
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    padding: 0 1.75rem;
+  }
+}
+
+/* =======================================================
+   BUTTONS — 3 biến thể dùng chung class .btn
+======================================================= */
+.btn {
+  display: inline-flex; /* Cho phép icon và chữ nằm ngang */
+  align-items: center;
+  gap: 0.5rem; /* Khoảng cách giữa icon và chữ */
+  padding: 0.8rem 1.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s; /* Hiệu ứng mượt khi hover */
+  cursor: pointer;
+  border: 2px solid transparent; /* Giữ kích thước ổn định với .btn-outline */
+}
+
+/* Nút nền cam đặc — biến thể "mạnh" nhất trong 3 biến thể .btn, dùng cho CTA CHÍNH (duy nhất 1
+   nút loại này trên mỗi khu vực) như "Thêm vào giỏ", "Đặt hàng". Chữ trắng trên nền cam để đạt độ
+   tương phản cao nhất trong cả bảng màu, hover đổi --primary-dark (xem giải thích ở :root) thay
+   vì đổi opacity, vì đổi hẳn màu cho cảm giác phản hồi rõ ràng hơn trên các nút quan trọng. */
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+/* Nút viền cam, nền trong suốt — biến thể "nhẹ" hơn .btn-primary, dùng cho hành động PHỤ đứng
+   cạnh 1 nút .btn-primary (ví dụ "Xem chi tiết" cạnh "Mua ngay") để 2 nút không cạnh tranh sự
+   chú ý ngang nhau. Hover thì tô đặc nền cam + chữ trắng — biến thành giống .btn-primary lúc
+   hover để khách vẫn cảm nhận được là nút có thể bấm, dù lúc nghỉ trông "nhẹ" hơn. */
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+.btn-outline:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Nút nền trắng, chữ cam — dùng riêng cho nút đặt TRÊN NỀN TỐI/NỀN MÀU (banner khuyến mãi, hero
+   section), vì nếu dùng .btn-primary (nền cam) trên banner cũng có thể đang nền cam/đỏ thì nút
+   sẽ "biến mất" do không đủ tương phản với nền xung quanh. Hover ngả sang #f3f4f6 (xám rất nhạt)
+   thay vì cam, để tránh đổi sang gần giống màu nền banner phía sau gây khó phân biệt. */
+.btn-white {
+  background: #fff;
+  color: var(--primary);
+}
+.btn-white:hover {
+  background: #f3f4f6;
+}

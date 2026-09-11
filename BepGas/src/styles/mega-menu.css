@@ -1,0 +1,362 @@
+/* =======================================================
+   MEGA MENU DANH MỤC
+   Nút Danh mục nằm trong header-main cùng hàng logo/search.
+   Panel trải full-width, top được tính qua JS → --mega-top.
+   Kiến trúc 2 cột: cột trái 260px (danh mục gốc) + 1fr (panel phải)
+======================================================= */
+
+/* Wrapper ngoài cùng — position:static để không tạo stacking context
+   (panel mega-menu dùng position:fixed nên không cần parent relative) */
+.mega-wrap {
+  position: static;
+}
+
+/* ── NÚT "DANH MỤC ▾" ── */
+
+/* Pill capsule cam gradient — đây là nút quan trọng thứ 2 trên toàn site (sau nút "Đặt hàng"),
+   nên CỐ TÌNH không dùng var(--primary) phẳng như các nút thường mà dùng gradient riêng
+   (#c24900 → #f06418, tối hơn và sáng hơn --primary #e85d04 một chút ở 2 đầu) để nút này có
+   chiều sâu, tách biệt hẳn khỏi các nút .btn-primary khác trên header — khẳng định đây là điểm
+   vào chính của toàn bộ danh mục sản phẩm. box-shadow cam tạo hiệu ứng glowing nhẹ */
+.cat-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: center; /* Căn giữa dọc trong hàng header */
+  height: 46px;
+  min-width: 158px;
+  padding: 0 1.35rem;
+  color: #fff;
+  font-size: 0.9375rem; /* 15px — nhất quán theo design */
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  white-space: nowrap; /* Không xuống hàng */
+  background: linear-gradient(130deg, #c24900 0%, #f06418 100%); /* Gradient cam đậm → sáng */
+  border: none;
+  border-radius: 999px; /* Pill hoàn toàn */
+  box-shadow: 0 4px 14px rgba(194, 73, 0, 0.34); /* Bóng cam mờ tạo depth */
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s,
+    filter 0.2s;
+  cursor: pointer;
+  flex-shrink: 0; /* Không co lại khi header bị hẹp */
+}
+/* Icon trong nút — không co khi gap thay đổi */
+.cat-toggle > svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+/* Hover: sáng hơn, bóng đậm hơn, nhấc lên nhẹ */
+.cat-toggle:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 7px 22px rgba(194, 73, 0, 0.46);
+  transform: translateY(-1px);
+}
+/* Icon menu scale khi hover */
+.cat-toggle:hover > svg:first-child {
+  transform: scale(1.15);
+}
+/* Trạng thái đang mở menu — tối hơn, nhấn xuống */
+.cat-toggle.active {
+  filter: brightness(0.88);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transform: none;
+}
+/* Chevron xoay 180° khi menu đang mở */
+.cat-toggle .chevron-up {
+  transform: rotate(180deg);
+  transition: transform 0.25s ease;
+}
+
+/* Mobile: ẩn label chữ + chevron, giữ lại chỉ icon menu */
+@media (max-width: 768px) {
+  .cat-toggle-label {
+    display: none; /* Ẩn chữ "Danh mục" */
+  }
+  .cat-toggle {
+    height: 38px;
+    min-width: unset; /* Không giữ chiều rộng tối thiểu */
+    padding: 0 0.85rem;
+    gap: 0;
+    align-self: center;
+    box-shadow: none; /* Bỏ bóng trên mobile để gọn hơn */
+  }
+  .cat-toggle svg:last-child {
+    display: none; /* Ẩn chevron */
+  }
+}
+
+/* ── PANEL MEGA MENU ── */
+
+/* Panel cố định full-width, bắt đầu ngay dưới đáy header
+   --mega-top được JS tính và cập nhật mỗi khi resize/scroll */
+.mega-menu {
+  position: fixed;
+  top: var(--mega-top, 72px); /* Fallback 72px nếu JS chưa chạy */
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 260px 1fr; /* Cột trái cố định 260px, phải linh hoạt */
+  background: #fff;
+  border-top: 3px solid var(--primary); /* Viền cam trên đỉnh làm điểm nhấn */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); /* Bóng đậm tạo cảm giác nổi */
+  z-index: 300; /* Trên header (z:100), dropdown thường (z:200) */
+  height: 520px;
+  animation: fadeIn 0.15s ease; /* Xuất hiện mượt */
+}
+
+/* Mobile: menu toàn màn hình, chỉ 1 cột (danh mục gốc) */
+@media (max-width: 768px) {
+  .mega-menu {
+    grid-template-columns: 1fr; /* 1 cột duy nhất */
+    height: calc(100vh - var(--mega-top, 72px)); /* Chiếm hết chiều cao còn lại */
+    overflow-y: auto;
+  }
+  .mega-right {
+    display: none; /* Ẩn panel phải — chỉ xem danh mục gốc trên mobile */
+  }
+}
+
+/* ── CỘT TRÁI: DANH SÁCH DANH MỤC GỐC ── */
+
+/* Cột trái — nền trắng, viền phải phân cách, scroll dọc nếu quá dài */
+.mega-left {
+  background: #fff;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 0.4rem 0;
+  height: 100%;
+}
+
+/* Mỗi danh mục gốc — text + mũi tên, không ảnh (giống Tiki)
+   border-left:3px transparent để giữ layout ổn định khi active thêm viền */
+.mega-cat-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.72rem 1rem 0.72rem 1.1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s;
+  border: none;
+  border-left: 3px solid transparent; /* Placeholder cho viền cam khi active */
+  background: none;
+  font-family: inherit;
+  gap: 0;
+}
+.mega-cat-item:hover {
+  background: #f5f5f5;
+}
+/* Danh mục đang được chọn — nền cam nhạt + viền trái cam */
+.mega-cat-active {
+  background: #fff7f3;
+  border-left-color: var(--primary);
+}
+
+/* Tên danh mục — chiếm hết chiều rộng còn lại (flex:1) */
+.mega-cat-name {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--secondary);
+  line-height: 1.35;
+}
+/* Màu cam khi hover */
+.mega-cat-item:hover .mega-cat-name {
+  color: var(--primary);
+}
+/* Màu cam + đậm khi active */
+.mega-cat-active .mega-cat-name {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Mũi tên → bên phải — xám khi bình thường */
+.mega-cat-arrow {
+  color: #ccc;
+  flex-shrink: 0;
+}
+/* Mũi tên cam khi danh mục active */
+.mega-cat-active .mega-cat-arrow {
+  color: var(--primary);
+}
+
+/* Link "Tất cả sản phẩm →" cuối cột trái — viền trên phân cách */
+.mega-view-all {
+  display: block;
+  padding: 0.8rem 1.1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+  border-top: 1px solid var(--border);
+  margin-top: 0.3rem;
+}
+.mega-view-all:hover {
+  text-decoration: underline;
+}
+
+/* ── PANEL PHẢI: DANH MỤC CON + THƯƠNG HIỆU ── */
+
+/* Panel phải — scroll dọc, flex column cho các section */
+.mega-right {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  height: 100%;
+  background: #fff;
+}
+
+/* Header panel phải: tên danh mục cha + link "Xem tất cả" */
+.mega-right-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Tên trái, link phải */
+  padding-bottom: 0.55rem;
+  border-bottom: 1.5px solid var(--border); /* Đường kẻ dưới heading */
+  flex-shrink: 0; /* Không co lại khi nội dung nhiều */
+}
+/* Tên danh mục cha — viết hoa, khoảng cách chữ tạo cảm giác tiêu đề section */
+.mega-right-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+/* Link "Xem tất cả →" bên phải heading */
+.mega-right-more {
+  font-size: 0.8rem;
+  color: var(--primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+.mega-right-more:hover {
+  text-decoration: underline;
+}
+
+/* ── LƯỚI DANH MỤC CON (6 CỘT) ── */
+
+/* Grid 6 cột đều nhau — layout giống Tiki */
+.mega-subcat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.25rem 0.2rem;
+}
+
+/* Card danh mục con — ảnh + tên xếp dọc, căn giữa
+   Nền trong suốt mặc định, chỉ tô khi hover */
+.mega-subcat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.55rem 0.2rem 0.45rem;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  text-align: center;
+  transition: background 0.13s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.mega-subcat-card:hover {
+  background: #f5f5f5; /* Nền xám nhạt khi hover */
+}
+
+/* Khung ảnh danh mục con — 80×80px, không nền
+   Mục đích: ảnh tự nhiên (không có hình nền) để trông gọn hơn */
+.mega-subcat-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  overflow: hidden;
+  flex-shrink: 0;
+  color: var(--primary); /* Màu icon SVG fallback */
+  font-size: 1.8rem;
+}
+
+/* Ảnh thật từ URL — fit:contain để không crop biểu tượng */
+.msc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Emoji dùng làm fallback khi không có ảnh */
+.msc-emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+/* Tên danh mục con — nhỏ, giới hạn 2 dòng rồi cắt "..." */
+.mega-subcat-name {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #333;
+  line-height: 1.35;
+  word-break: break-word;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Tối đa 2 dòng */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
+}
+/* Màu cam khi hover card */
+.mega-subcat-card:hover .mega-subcat-name {
+  color: var(--primary);
+}
+
+/* ── SECTION THƯƠNG HIỆU ── */
+
+/* Wrapper section thương hiệu — flex-shrink:0 để không bị nén khi ít chỗ */
+.mega-brands-section {
+  flex-shrink: 0;
+}
+/* Header section: nhãn "THƯƠNG HIỆU" + link "Xem thêm" */
+.mega-brands-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+/* Nhãn "THƯƠNG HIỆU" — viết hoa nhỏ, xám */
+.mega-brands-head span {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+/* ── EMPTY STATE ── */
+
+/* Trạng thái trống — căn giữa cả chiều ngang lẫn dọc trong panel phải */
+.mega-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* Chiếm toàn bộ chiều cao panel phải */
+  gap: 0.75rem;
+  color: var(--text-light);
+}
+/* Emoji lớn làm minh hoạ khi không có danh mục con */
+.mega-empty span {
+  font-size: 3rem;
+}
+/* Câu thông báo dưới emoji, ví dụ "Chưa có danh mục con" */
+.mega-empty p {
+  font-size: 0.9rem;
+}

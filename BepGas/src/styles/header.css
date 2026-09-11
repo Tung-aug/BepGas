@@ -1,0 +1,603 @@
+/* =======================================================
+   HEADER — Thanh điều hướng cố định trên cùng
+   position:sticky giữ header luôn hiện khi scroll xuống
+   z-index:100 đảm bảo header nằm trên nội dung trang
+======================================================= */
+
+/* Header dính vào đỉnh khi scroll, bóng nhẹ tạo depth */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  box-shadow:
+    0 1px 0 var(--border), /* Đường viền dưới mỏng */
+    0 2px 12px rgba(0, 0, 0, 0.06); /* Bóng mờ tạo cảm giác nổi */
+  width: 100%;
+}
+
+/* Hàng chính: nút Danh mục + logo + search + nút hành động */
+.header-main {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  padding-top: 1.05rem;
+  padding-bottom: 1.05rem;
+}
+
+/* ── LOGO ── */
+
+/* Logo: icon + chữ thương hiệu — không xuống hàng, không co */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--secondary);
+  white-space: nowrap; /* Không bao giờ xuống hàng */
+  letter-spacing: -0.5px; /* Chữ sát hơn để gọn */
+  flex-shrink: 0; /* Không co khi header bị hẹp */
+}
+/* Phần "VN" trong logo — màu cam nổi bật */
+.logo strong {
+  color: var(--primary);
+}
+
+/* ── THANH TÌM KIẾM ── */
+
+/* Wrapper tìm kiếm — flex:1 để chiếm không gian còn lại, position:relative cho dropdown */
+.search-bar-wrap {
+  flex: 1;
+  max-width: 680px; /* Không quá rộng để cân bằng với phần còn lại */
+  position: relative; /* Anchor cho dropdown gợi ý */
+}
+
+/* Thanh tìm kiếm — pill border, nền xám nhạt, chuyển trắng khi focus */
+.search-bar {
+  display: flex;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 50px; /* Pill tròn hoàn toàn */
+  overflow: hidden; /* Bo góc cắt button bên trong */
+  background: #f8fafc;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+  width: 100%;
+}
+/* Khi đang focus vào input bên trong: viền cam + glow nhẹ */
+.search-bar:focus-within {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.08); /* Vòng sáng cam mờ */
+}
+
+/* Wrapper chứa hint text + input — relative cho hint absolute */
+.search-hint-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* Cắt hint text tràn */
+}
+/* Input tìm kiếm — nền trong suốt để thấy nền search-bar */
+.search-hint-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  background: transparent;
+  width: 100%;
+  color: var(--secondary);
+}
+
+/* Hint/placeholder động — text gợi ý thay đổi liên tục
+   pointer-events:none để click xuyên qua vào input */
+.sh-hint {
+  position: absolute;
+  left: 1.25rem;
+  right: 2.5rem; /* Nhường chỗ cho icon trong input */
+  pointer-events: none;
+  color: #a0aec0; /* Xám nhạt như placeholder */
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Cắt "..." nếu hint dài */
+  opacity: 0; /* Ẩn mặc định, hiện qua class sh-on */
+  transition: opacity 0.3s ease;
+}
+/* Hiện hint khi JS thêm class sh-on */
+.sh-hint.sh-on {
+  opacity: 1;
+}
+
+/* Nút tìm kiếm — nền cam, bo góc phải khớp với pill search-bar */
+.search-bar button {
+  padding: 0.75rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 0 50px 50px 0; /* Chỉ bo góc phải */
+  transition: background 0.2s;
+  flex-shrink: 0; /* Không co lại */
+}
+.search-bar button:hover {
+  background: var(--primary-dark);
+}
+
+/* Keyframe quay 360° — dùng cho spinner loading */
+@keyframes hdr-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Spinner tròn trong nút search khi đang gọi API */
+.ss-spin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4); /* Nền spinner mờ */
+  border-top-color: #fff; /* Phần chạy sáng trắng */
+  animation: hdr-spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+/* ── DROPDOWN GỢI Ý TÌM KIẾM ── */
+
+/* Dropdown gợi ý — tuyệt đối dưới search-bar, bo góc, bóng */
+.search-suggest-dropdown {
+  position: absolute;
+  top: calc(100% + 6px); /* Cách search-bar 6px */
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 9999; /* Trên tất cả kể cả mega menu */
+}
+
+/* Từng item gợi ý: ảnh + thông tin nằm ngang */
+.ssi-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.85rem;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+/* Hover và keyboard-active đổi nền cam nhạt */
+.ssi-item:hover,
+.ssi-active {
+  background: #fff7f0;
+}
+
+/* Ảnh sản phẩm gợi ý — thumbnail nhỏ, bo góc */
+.ssi-img {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f3f4f6; /* Placeholder khi ảnh chưa tải */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ssi-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cột thông tin: tên + giá */
+.ssi-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0; /* Cho phép text-overflow hoạt động */
+}
+/* Tên sản phẩm — cắt "..." nếu dài */
+.ssi-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Giá sản phẩm — cam đậm */
+.ssi-price {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Footer dropdown: "Xem tất cả X kết quả" — nền xám nhạt */
+.ssi-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.83rem;
+  color: var(--text-light);
+  border-top: 1px solid #f3f4f6; /* Phân cách với danh sách */
+  cursor: pointer;
+  background: #fafafa;
+  transition: background 0.12s;
+}
+.ssi-footer:hover {
+  background: #f3f4f6;
+  color: var(--primary);
+}
+/* Từ khóa tìm kiếm trong footer — màu tối */
+.ssi-footer strong {
+  color: var(--text);
+}
+
+/* ── NÚT HÀNH ĐỘNG BÊN PHẢI HEADER ── */
+
+/* Nhóm nút phải: tài khoản + giỏ hàng
+   margin-left:auto đẩy nhóm này sang phải cùng */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+/* Nút giỏ hàng — xếp icon trên, chữ "Giỏ hàng" dưới
+   position:relative để đặt badge số lượng tuyệt đối */
+.cart-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.9rem;
+  color: var(--secondary);
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: 1.5px solid transparent; /* Transparent để không nhảy layout khi thêm viền */
+  transition:
+    color 0.18s,
+    background 0.18s,
+    border-color 0.18s;
+}
+.cart-btn:hover {
+  color: var(--primary);
+  background: var(--bg-gray);
+  border-color: var(--border);
+}
+
+/* Badge số lượng sản phẩm trong giỏ — vòng tròn nhỏ góc trên phải icon. Dùng var(--primary)
+   (cam thương hiệu) thay vì đỏ như nhiều site TMĐT khác thường làm cho badge số lượng, để nhất
+   quán với toàn bộ các điểm nhấn "tích cực/CTA" trên header — đỏ trong site này được dành riêng
+   cho hành động phá hủy/lỗi (xem .clear-cart trong cart.css), không phù hợp cho 1 con số trung
+   lập như số lượng giỏ hàng. */
+.cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px; /* Nhô ra ngoài nút một chút */
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── HELPERS ẨN/HIỆN THEO MÀN HÌNH ── */
+
+/* Desktop: hiện đầy đủ tài khoản + giỏ hàng */
+.header-desktop {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+/* Mobile icons (giỏ hàng icon, search icon...) — ẩn mặc định */
+.header-mobile-icons {
+  display: none;
+}
+
+/* ════════════════════════════════════════════════════
+   MOBILE HEADER — 2 hàng: Hàng 1 logo+icons / Hàng 2 search full-width
+   ════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Ẩn announcement bar trên mobile để tiết kiệm chiều cao màn hình */
+  .ann-bar {
+    display: none;
+  }
+
+  /* Header mobile: dùng flex-wrap để chia 2 hàng */
+  .header-main {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.55rem;
+    padding-bottom: 0;
+  }
+
+  /* Logo linh hoạt chiếm không gian giữa nút danh mục và mobile icons */
+  .logo {
+    flex: 1;
+    font-size: 1.4rem;
+  }
+
+  /* Ẩn nhóm desktop (tài khoản text + giỏ hàng text) */
+  .header-desktop {
+    display: none !important;
+  }
+
+  /* Hiện nhóm mobile icons (icon giỏ hàng + icon tài khoản) */
+  .header-mobile-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+  /* Nút icon trong mobile header — 40×40 touchable */
+  .hmi-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    color: var(--secondary);
+    background: transparent;
+    border: none;
+    transition: background 0.15s;
+  }
+  .hmi-btn:hover {
+    background: var(--bg-gray);
+  }
+  .hmi-cart {
+    color: var(--secondary);
+  }
+
+  /* Hàng 2: Search full-width wrap xuống nhờ flex-basis:100% */
+  .search-bar-wrap {
+    order: 3; /* Đảm bảo sau hàng logo/icons */
+    flex-basis: 100%; /* Chiếm cả hàng */
+    max-width: none;
+  }
+  /* Thanh tìm kiếm mobile: full-width, không bo góc, viền trên/dưới */
+  .search-bar {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    /* Margin âm để search bar rộng ra ngoài container padding */
+    margin: 0 calc(-1 * var(--container-px, 2rem));
+    background: #f8fafc;
+  }
+  .search-bar:focus-within {
+    border-color: var(--primary);
+  }
+  .search-hint-wrap input {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  .search-bar button {
+    border-radius: 0; /* Không bo góc trên mobile */
+    padding: 0.6rem 1rem;
+  }
+  /* Dropdown gợi ý mobile: rộng ra ngoài container */
+  .search-suggest-dropdown {
+    border-radius: 0 0 12px 12px;
+    margin: 0 calc(-1 * var(--container-px, 2rem));
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   MOBILE CATEGORY DRAWER — Panel trượt từ trái
+   Dùng riêng trên mobile thay vì mega menu desktop
+   ════════════════════════════════════════════════════ */
+
+/* Lớp phủ tối toàn màn hình khi drawer mở */
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 500; /* Trên header */
+  display: flex;
+  align-items: stretch;
+}
+
+/* Panel drawer — trượt từ trái vào, tối đa 340px */
+.mobile-drawer {
+  width: min(85vw, 340px); /* 85% màn hình nhưng không quá 340px */
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: slideInLeft 0.22s ease; /* Trượt vào từ trái */
+  overflow: hidden;
+}
+/* Keyframe trượt từ trái vào */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%); /* Bắt đầu ngoài màn hình trái */
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Header drawer: tiêu đề + nút đóng — nền tối navy */
+.mobile-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.1rem;
+  background: var(--secondary); /* Navy tối, đối lập với body trắng */
+  color: #fff;
+  flex-shrink: 0; /* Không co khi nội dung nhiều */
+}
+/* Tiêu đề: icon + chữ "Danh mục" */
+.mobile-drawer-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+/* Nút X đóng drawer */
+.mobile-drawer-close {
+  color: rgba(255, 255, 255, 0.8);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+}
+.mobile-drawer-close:hover {
+  color: #fff;
+}
+
+/* Body drawer — scroll dọc, padding dưới để không che content */
+.mobile-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+}
+
+/* ── ACCORDION DANH MỤC TRONG DRAWER ── */
+
+/* Nhóm từng danh mục cha — phân cách bằng viền dưới */
+.mdc-group {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Hàng danh mục cha: link tên + nút expand */
+.mdc-row {
+  display: flex;
+  align-items: center;
+}
+/* Link tên danh mục — chiếm phần còn lại, touchable */
+.mdc-name {
+  flex: 1;
+  padding: 0.8rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  display: block; /* Block để padding hoạt động đúng */
+}
+.mdc-name:hover {
+  color: var(--primary);
+}
+
+/* Nút expand/collapse danh mục con — chevron xoay khi mở */
+.mdc-expand {
+  padding: 0.8rem 1rem;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    color 0.15s;
+  display: flex;
+  align-items: center;
+}
+.mdc-expand:hover {
+  color: var(--primary);
+}
+/* Xoay chevron 180° khi đã mở */
+.mdc-expand.mdc-expanded svg {
+  transform: rotate(180deg);
+}
+
+/* Panel con — nền xám nhạt, indent, trượt xuống mượt */
+.mdc-children {
+  background: var(--bg-gray);
+  border-top: 1px solid var(--border);
+  animation: fadeIn 0.15s ease;
+}
+/* Mỗi danh mục con — indent thêm 1.5rem */
+.mdc-child {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem 0.6rem 1.5rem; /* Indent thêm so với danh mục cha */
+  font-size: 0.85rem;
+  color: var(--text-light);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+.mdc-child:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Link "Tất cả sản phẩm →" cuối danh sách */
+.mdc-view-all {
+  display: block;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+}
+.mdc-view-all:hover {
+  text-decoration: underline;
+}
+
+/* ── SECTION THƯƠNG HIỆU TRONG DRAWER ── */
+
+/* Wrapper thương hiệu */
+.mdc-brands {
+  padding: 1rem 1.1rem 0.5rem;
+}
+/* Tiêu đề nhỏ "THƯƠNG HIỆU" */
+.mdc-brands-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+  margin-bottom: 0.6rem;
+}
+/* Hàng chip thương hiệu — wrap khi quá nhiều */
+.mdc-brands-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+/* Chip thương hiệu — pill viền xám, cam khi hover */
+.mdc-brand-chip {
+  padding: 0.3rem 0.7rem;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--bg);
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+.mdc-brand-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}

@@ -1,0 +1,377 @@
+/* =======================================================
+   PROMO BANNER — Banner khuyến mãi full-width có ảnh nền
+   Gradient từ cam đậm (trái) sang trong suốt (phải)
+   để chữ nổi rõ trên ảnh nền
+======================================================= */
+
+/* Banner full-width, ảnh nền kết hợp gradient che một nửa trái */
+.promo-banner {
+  width: 100%;
+  min-height: 320px;
+  background:
+    /* Gradient cam phủ lên ảnh để chữ trắng dễ đọc */
+    linear-gradient(to right, rgba(232, 93, 4, 0.92) 0%, rgba(196, 77, 0, 0.7) 50%, transparent 100%),
+    url('https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=1800&h=500&fit=crop') center/cover
+      no-repeat;
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
+}
+
+/* Tiêu đề banner — trắng, to */
+.promo-content h2 {
+  color: #fff;
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 0.85rem;
+}
+
+/* Mô tả banner — trắng hơi mờ, giới hạn chiều rộng để dễ đọc */
+.promo-content p {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1.1rem;
+  margin-bottom: 1.75rem;
+  max-width: 520px;
+  line-height: 1.65;
+}
+
+/* =======================================================
+   HERO BANNER SLIDER — Slider ảnh banner lấy từ database
+   Kỹ thuật: ảnh chính (contain) nổi trên nền mờ (blur)
+   để tránh ảnh bị crop, vẫn lấp đầy khung
+======================================================= */
+
+/* Slider wrapper — overflow:hidden cắt ảnh tràn khi slide */
+.hero-banner-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #1a1a1a; /* Nền tối khi ảnh đang tải */
+}
+
+/* Từng slide — link bao ngoài toàn bộ ảnh */
+.hbs-slide {
+  display: block;
+  width: 100%;
+  height: 520px; /* Chiều cao cố định — thay đổi theo breakpoint */
+  text-decoration: none;
+  position: relative; /* Anchor cho ::before, ::after và các element con */
+  overflow: hidden;
+  background: #0d0d0d;
+}
+
+/* Lớp nền mờ — cùng ảnh nhưng blur + tối hơn, phủ kín toàn khung */
+.hbs-slide::before {
+  content: '';
+  position: absolute;
+  inset: -4px; /* Mở rộng 4px ra ngoài để che pixel trắng viền khi scale */
+  background-image: var(--hbs-bg); /* Được set bằng inline style trong JS */
+  background-size: cover;
+  background-position: center;
+  filter: blur(5px) brightness(0.75) saturate(1.2); /* Mờ + tối + tăng màu */
+  transform: scale(1.02); /* Phóng to nhẹ để che viền trắng do blur */
+  z-index: 0;
+}
+
+/* Lớp gradient tối 2 rìa — tạo chuyển tiếp mượt trái-phải, trên-dưới */
+.hbs-slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    /* Tối nhẹ 2 cạnh trái/phải */
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.25) 0%,
+      transparent 18%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.25) 100%
+    ),
+    /* Tối nhẹ 2 cạnh trên/dưới */
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.1) 0%,
+        transparent 15%,
+        transparent 85%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+  z-index: 2;
+  pointer-events: none; /* Không chặn click qua ảnh chính */
+}
+
+/* Ảnh chính — object-fit:contain để hiện toàn bộ ảnh, không crop */
+.hbs-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Không cắt ảnh, nền mờ ::before lấp đầy phần trống */
+  object-position: center;
+  z-index: 1; /* Trên nền mờ ::before (z:0), dưới lớp gradient ::after (z:2) */
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Zoom mượt */
+  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.3)); /* Bóng nhẹ quanh ảnh */
+}
+/* Zoom nhẹ ảnh khi hover slide */
+.hbs-slide:hover .hbs-img {
+  transform: scale(1.02);
+}
+
+/* Mobile: giảm chiều cao slider */
+@media (max-width: 768px) {
+  .hbs-slide {
+    height: 240px;
+  }
+}
+/* Hover scale — override lại cho tường hợp có 2 selector trùng nhau */
+.hbs-slide:hover .hbs-img {
+  transform: scale(1.03);
+}
+
+/* Lớp gradient tối phủ nửa trái — làm nền cho chữ caption */
+.hbs-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(10, 10, 20, 0.62) 0%, rgba(10, 10, 20, 0.25) 55%, transparent 100%);
+}
+
+/* Caption chữ — căn giữa dọc, nằm trên lớp overlay */
+.hbs-caption {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%); /* Căn giữa dọc chính xác */
+}
+/* Tiêu đề slide — trắng, bóng chữ để đọc được trên ảnh */
+.hbs-caption h2 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Bóng chữ tăng tương phản */
+  max-width: 520px;
+  line-height: 1.3;
+}
+
+/* Nút mũi tên prev/next — hình tròn nửa trong suốt, backdrop blur */
+.hbs-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.18); /* Trắng trong suốt */
+  backdrop-filter: blur(4px); /* Làm mờ nền bên dưới nút */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 10; /* Trên mọi lớp ảnh và overlay */
+}
+.hbs-arrow:hover {
+  background: rgba(255, 255, 255, 0.35); /* Sáng hơn khi hover */
+}
+/* Vị trí nút trái/phải */
+.hbs-prev {
+  left: 1.25rem;
+}
+.hbs-next {
+  right: 1.25rem;
+}
+
+/* Chấm điều hướng bên dưới slider */
+.hbs-dots {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%); /* Căn giữa ngang */
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+/* Từng chấm tròn nhỏ */
+.hbs-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5); /* Trắng mờ — chưa active */
+  border: none;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+  padding: 0;
+}
+/* Chấm đang active — trắng đục, phóng to */
+.hbs-dot.active {
+  background: #fff;
+  transform: scale(1.3);
+}
+
+/* Breakpoints chiều cao slider theo màn hình */
+@media (max-width: 1024px) {
+  .hbs-slide {
+    height: 420px; /* Tablet nằm */
+  }
+}
+@media (max-width: 768px) {
+  .hbs-slide {
+    height: 280px; /* Tablet đứng / mobile lớn */
+  }
+  /* Tắt zoom ảnh khi hover trên mobile (không có hover) */
+  .hbs-slide:hover .hbs-img {
+    transform: none;
+  }
+  .hbs-caption h2 {
+    font-size: 1.25rem;
+  }
+  /* Nút mũi tên nhỏ hơn trên mobile */
+  .hbs-arrow {
+    width: 34px;
+    height: 34px;
+  }
+}
+@media (max-width: 480px) {
+  .hbs-slide {
+    height: 200px; /* Mobile nhỏ */
+  }
+}
+
+/* =======================================================
+   POPUP BANNER — Modal quảng cáo xuất hiện khi vào trang
+======================================================= */
+
+/* Lớp phủ tối toàn màn hình — cố định, z-index cao nhất. Dùng rgba(0,0,0, alpha) thay vì màu
+   đặc + opacity riêng để chỉ làm tối NỀN PHÍA SAU mà không ảnh hưởng độ trong của modal phía
+   trên; kỹ thuật này lặp lại nhiều lần trong file (.hbs-slide::after, .hbs-overlay, .popup-close)
+   — alpha thấp (0.1–0.25) cho hiệu ứng "tối nhẹ/đổ bóng", alpha cao (0.5–0.8) cho "che hẳn nền". */
+.popup-overlay {
+  position: fixed;
+  inset: 0; /* Shorthand: top:0 right:0 bottom:0 left:0 */
+  background: rgba(0, 0, 0, 0.55); /* Nền tối mờ */
+  z-index: 9999; /* Trên mọi thứ khác */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.25s ease;
+}
+
+/* Modal card — giới hạn chiều rộng, bo góc, đổ bóng đậm */
+.popup-modal {
+  position: relative; /* Anchor cho nút X */
+  max-width: 560px;
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden; /* Bo góc cắt ảnh */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  background: #fff;
+  animation: slideUp 0.3s ease; /* Trượt từ dưới lên khi xuất hiện */
+}
+/* Ảnh chính của popup */
+.popup-modal img {
+  width: 100%;
+  display: block;
+  max-height: 380px;
+  object-fit: cover; /* Cắt ảnh đúng tỷ lệ */
+}
+
+/* Nút X đóng popup — vòng tròn tối, góc trên phải ảnh */
+.popup-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s;
+}
+.popup-close:hover {
+  background: rgba(0, 0, 0, 0.8); /* Tối hơn khi hover */
+}
+
+/* Footer popup — tiêu đề + nút CTA nằm ngang */
+.popup-footer {
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+/* Chữ tiêu đề ngắn bên trái nút CTA */
+.popup-footer p {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+/* Link CTA popup — cam đậm, không xuống hàng */
+.popup-cta {
+  white-space: nowrap; /* Không xuống hàng dù text dài */
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+.popup-cta:hover {
+  text-decoration: underline;
+}
+
+/* Keyframe: fade in (dùng cho overlay) */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Keyframe: slide up (dùng cho modal card) */
+@keyframes slideUp {
+  from {
+    transform: translateY(30px); /* Bắt đầu thấp hơn 30px */
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =======================================================
+   SIDEBAR BANNER — Banner nhỏ bên dưới bộ lọc sản phẩm
+======================================================= */
+
+/* Wrapper banner sidebar — bo góc, viền, ẩn overflow */
+.sidebar-banner-wrap {
+  margin-top: 1.25rem;
+  border-radius: var(--radius-sm);
+  overflow: hidden; /* Bo góc cắt ảnh */
+  border: 1px solid var(--border);
+}
+/* Ảnh banner sidebar — full width, giới hạn chiều cao */
+.sidebar-banner-wrap img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  max-height: 220px;
+}
+/* Caption dưới ảnh — nhỏ, màu xám, nền xám nhạt */
+.sidebar-banner-title {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin: 0;
+  background: var(--bg-gray);
+}

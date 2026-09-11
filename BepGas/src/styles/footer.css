@@ -1,0 +1,364 @@
+/* =======================================================
+   FOOTER — Chân trang toàn site
+   Gồm: logo + mô tả, menu links, thông tin liên hệ,
+   phương thức thanh toán, bản quyền
+======================================================= */
+
+/* Footer nền tối navy var(--secondary) — đảo ngược tông màu so với toàn bộ phần còn lại của
+   trang (nền trắng) để đánh dấu rõ ràng "đây là ranh giới cuối trang", đồng thời màu chữ #94a3b8
+   (xám sáng vừa đủ tương phản trên nền tối, không dùng trắng thuần #fff vì sẽ quá chói/gắt cho
+   cả khối text dài — trắng thuần chỉ dành riêng cho heading/logo cần nổi bật nhất, xem
+   .footer-brand .logo và .footer-col h4 bên dưới). margin-top:auto đẩy footer xuống đáy trang */
+.footer {
+  background: var(--secondary); /* Màu navy đậm #0f172a */
+  color: #94a3b8; /* Màu chữ xám nhạt trên nền tối */
+  margin-top: auto; /* Kết hợp với flex column trên #root để footer luôn ở đáy */
+  width: 100%;
+}
+
+/* ── Grid 4 cột chính ── */
+
+/* Chia 4 cột: thương hiệu rộng hơn (1.5fr), 3 cột menu bằng nhau (1fr) */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3.5rem;
+  padding: 4rem 0;
+}
+
+/* ── Cột thương hiệu (logo + mô tả + mạng xã hội) ── */
+
+/* Logo footer — màu trắng để nổi trên nền tối */
+.footer-brand .logo {
+  color: #fff;
+  margin-bottom: 1.1rem;
+}
+
+/* Mô tả ngắn về thương hiệu */
+.footer-brand p {
+  font-size: 0.9rem;
+  line-height: 1.75; /* Dãn dòng để dễ đọc trên nền tối */
+  margin-bottom: 1.4rem;
+}
+
+/* Hàng icon mạng xã hội */
+.footer-social {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Từng icon mạng xã hội — hình tròn trong suốt, đổi màu khi hover */
+.footer-social a {
+  width: 38px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.1); /* Nền trắng trong suốt 10% */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.footer-social a:hover {
+  background: var(--primary); /* Nền cam khi hover */
+  color: #fff;
+}
+
+/* ── Các cột menu (Sản phẩm, Hỗ trợ, Liên hệ) ── */
+
+/* Tiêu đề cột — trắng, viết hoa, khoảng cách chữ */
+.footer-col h4 {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Link menu trong footer — block để chiếm cả hàng, dễ click */
+.footer-col a {
+  display: block;
+  font-size: 0.88rem;
+  margin-bottom: 0.65rem;
+  transition: color 0.2s;
+}
+.footer-col a:hover {
+  color: #fff; /* Sáng lên khi hover */
+}
+
+/* Mục liên hệ (địa chỉ, SĐT) — icon + chữ nằm ngang */
+.contact-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start; /* Căn trên để icon và chữ nhiều dòng không bị lệch */
+  margin-bottom: 0.65rem;
+  font-size: 0.88rem;
+}
+
+/* Link "Xem tất cả" — nổi bật màu cam trong danh sách xám */
+.footer-see-all {
+  color: var(--primary) !important; /* Override màu link mặc định #94a3b8 */
+  font-weight: 600;
+  font-size: 0.88rem !important;
+  margin-top: 0.35rem;
+}
+.footer-see-all:hover {
+  text-decoration: underline !important;
+}
+
+/* Logo footer dạng link — inline-flex để căn icon và chữ */
+.footer-logo {
+  text-decoration: none;
+  display: inline-flex;
+}
+
+/* ── Dải phương thức thanh toán ── */
+
+/* Phân cách nhẹ bằng viền trên mờ */
+.footer-payment {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 0;
+}
+.footer-payment .container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap; /* Xuống hàng nếu quá nhiều badge */
+}
+
+/* Nhãn "Chấp nhận thanh toán:" */
+.fp-label {
+  font-size: 0.87rem;
+  color: #64748b;
+  white-space: nowrap; /* Không xuống hàng */
+}
+
+/* Hàng badge thanh toán */
+.fp-logos {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Badge thanh toán chung — bo góc nhẹ, chữ đậm */
+.fp-badge {
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.87rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Màu nền riêng từng phương thức thanh toán — CHỦ Ý dùng đúng màu nhận diện thương hiệu THỰC TẾ
+   của từng cổng/loại thanh toán (không dùng bảng màu nội bộ của site) để khách nhận ra ngay từng
+   badge dù không đọc chữ, giống cách các badge này hiển thị trên các site TMĐT khác. */
+.fp-cod {
+  background: #374151; /* Xám tối — COD */
+  color: #e5e7eb;
+}
+.fp-vnpay {
+  background: #0066b3; /* Xanh dương — VNPay */
+  color: #fff;
+}
+.fp-visa {
+  background: #1a1f71; /* Xanh navy đậm — Visa */
+  color: #fff;
+}
+.fp-master {
+  background: #eb001b; /* Đỏ — Mastercard */
+  color: #fff;
+}
+.fp-momo {
+  background: #a50064; /* Tím hồng — MoMo */
+  color: #fff;
+}
+
+/* ── Dòng bản quyền cuối footer ── */
+
+/* Phân cách nhẹ hơn phần thanh toán */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 1.2rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.87rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Container bản quyền căn ngang hai đầu */
+.footer-bottom .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Hàng link chính sách — Bảo mật, Điều khoản... */
+.footer-bottom-links {
+  display: flex;
+  gap: 1.25rem;
+}
+/* Từng link chính sách — sáng lên khi hover */
+.footer-bottom-links a {
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+.footer-bottom-links a:hover {
+  color: #fff;
+}
+
+/* =======================================================
+   RESPONSIVE — Điều chỉnh layout theo màn hình
+======================================================= */
+
+/* Laptop nhỏ và tablet nằm (≤ 1280px) */
+@media (max-width: 1280px) {
+  /* Grid sản phẩm: 4 cột → 3 cột */
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* Trust badge: 4 icon → 2 hàng x 2 */
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Danh mục: 5 cột → 3 cột */
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* Footer: 4 cột → 2 cột x 2 hàng */
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+  /* Hero title nhỏ lại */
+  .hero-text h1 {
+    font-size: 3rem;
+  }
+}
+
+/* Tablet đứng và mobile (≤ 768px) */
+@media (max-width: 768px) {
+  /* Container hẹp hơn trên mobile */
+  .container {
+    padding: 0 1.25rem;
+  }
+
+  /* Hero nhỏ hơn trên mobile */
+  .hero {
+    min-height: 480px;
+  }
+  .hero-text h1 {
+    font-size: 2.2rem;
+  }
+  .hero-text p {
+    font-size: 0.98rem;
+  }
+
+  /* Grid sản phẩm: 3 cột → 2 cột */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Danh mục: 3 cột → 2 cột */
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Đánh giá: 3 cột → 1 cột */
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Trang sản phẩm: ẩn sidebar, chuyển sang panel overlay */
+  .products-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    display: none;
+    position: fixed; /* Overlay toàn màn hình khi mở */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px;
+    z-index: 50;
+    overflow-y: auto;
+    border-radius: 0; /* Không bo góc khi là panel trái */
+  }
+  .sidebar.sidebar-open {
+    display: block; /* Hiện panel khi class được toggle */
+  }
+  .close-filter {
+    display: flex;
+    align-items: center; /* Hiện nút X đóng sidebar */
+  }
+  .filter-toggle {
+    display: flex; /* Hiện nút "Bộ lọc" mở sidebar */
+  }
+
+  /* Trang chi tiết sản phẩm: 2 cột → 1 cột */
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* Giỏ hàng: 2 cột → 1 cột */
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+  /* Cart item: 3 cột → 2 cột, ảnh thu nhỏ */
+  .cart-item {
+    grid-template-columns: 90px 1fr;
+  }
+  /* Phần action của cart item chiếm toàn hàng */
+  .cart-item-actions {
+    flex-direction: row;
+    align-items: center;
+    grid-column: 1 / -1; /* Kéo dài qua tất cả cột */
+    justify-content: space-between;
+  }
+}
+
+/* Mobile nhỏ (≤ 480px) */
+@media (max-width: 480px) {
+  /* Grid sản phẩm: 2 cột, gap nhỏ hơn */
+  .product-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+  /* Padding card sản phẩm nhỏ hơn */
+  .product-info {
+    padding: 0.85rem;
+  }
+  /* Section padding dọc nhỏ hơn */
+  .section {
+    padding: 3rem 0;
+  }
+  /* Trust grid: vẫn 2 cột nhưng gap nhỏ hơn */
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  /* Icon trust nhỏ hơn */
+  .trust-icon-wrap {
+    width: 60px;
+    height: 60px;
+  }
+  /* Footer: 2 cột → 1 cột */
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  /* Hero nhỏ nhất */
+  .hero {
+    min-height: 400px;
+    padding: 3rem 0;
+  }
+  .hero-text h1 {
+    font-size: 1.8rem;
+  }
+}

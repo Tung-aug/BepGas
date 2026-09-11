@@ -1,0 +1,290 @@
+/* =======================================================
+   ORDER CARD — Card hiển thị trạng thái đơn hàng
+   Dùng trong trang Tài khoản > Đơn hàng của tôi
+======================================================= */
+
+/* Danh sách các đơn hàng — xếp dọc, cách nhau 1.25rem */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Card đơn hàng — viền xám, bo góc, ẩn nội dung tràn */
+.order-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; /* Bo góc cắt cả header/footer con */
+}
+
+/* ── Header card: mã đơn, ngày đặt, trạng thái ── */
+
+/* Header nằm ngang giữa mã đơn (trái) và ngày+trạng thái (phải) */
+.order-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  background: var(--bg-gray); /* Nền xám phân biệt với body */
+  border-bottom: 1.5px solid var(--border);
+  flex-wrap: wrap; /* Xuống hàng khi màn hình nhỏ */
+  gap: 0.5rem;
+}
+
+/* Nhãn "Mã đơn" phía trên mã đơn hàng */
+.order-code-label {
+  font-size: 0.84rem;
+  color: var(--text-light);
+  display: block;
+}
+
+/* Giá trị mã đơn — chữ đậm, màu tối */
+.order-code-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+/* Nhóm ngày + badge trạng thái bên phải header */
+.order-card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Ngày đặt hàng */
+.order-date {
+  font-size: 0.87rem;
+  color: var(--text-light);
+}
+
+/* Badge trạng thái đơn — màu nền/chữ thay đổi theo trạng thái */
+.order-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px; /* Dạng pill */
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── Timeline tiến trình đơn hàng ── */
+
+/* Hàng ngang chứa các bước tiến trình */
+.order-timeline {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 1.25rem 0.75rem;
+  gap: 0;
+}
+
+/* Mỗi bước trong timeline — chiếm đều nhau (flex:1) */
+.tl-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative; /* Để đường nối (.tl-line) định vị tuyệt đối */
+  flex: 1; /* Các bước chia đều chiều rộng */
+}
+
+/* ── Hệ màu timeline: 3 trạng thái dùng 3 màu cố định xuyên suốt cả nút tròn, nhãn chữ và đường
+   nối — var(--border) (xám) = bước CHƯA tới, #10b981 (xanh lá) = bước ĐÃ xong (đồng nhất quy
+   ước "xanh lá = tích cực/hoàn tất" dùng ở .free-shipping trong cart.css), var(--primary) (cam
+   thương hiệu) = bước HIỆN TẠI đang xử lý — dùng màu thương hiệu thay vì xanh dương/vàng trung
+   lập để bước đang chờ vẫn nổi bật và nhất quán nhận diện toàn site. ── */
+
+/* Nút tròn đánh dấu bước — mặc định màu xám */
+.tl-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.7rem;
+  z-index: 1; /* Nằm trên đường ngang .tl-line */
+  flex-shrink: 0;
+}
+
+/* Chấm nhỏ bên trong nút tròn (khi chưa hoàn thành) */
+.tl-dot-inner {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #aaa;
+}
+
+/* Bước đã hoàn thành — nút xanh lá */
+.tl-step.done .tl-dot {
+  background: #10b981;
+}
+
+/* Bước hiện tại — nút cam, có vòng sáng (glow). #fff3ed chính là giá trị của var(--primary-light)
+   viết tay thay vì dùng biến — glow này cần object riêng ngoài box-shadow viền nên giữ hex trực
+   tiếp cho rõ nghĩa, nhưng vẫn cùng tông với --primary-light ở base.css để đồng bộ thương hiệu. */
+.tl-step.current .tl-dot {
+  background: var(--primary);
+  box-shadow: 0 0 0 3px #fff3ed; /* Vòng sáng cam nhạt nổi bật bước đang xử lý */
+}
+
+/* Nhãn chữ dưới nút tròn */
+.tl-label {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  text-align: center;
+  margin-top: 0.35rem;
+  white-space: nowrap; /* Không xuống hàng */
+}
+/* Nhãn bước đã xong — xanh lá */
+.tl-step.done .tl-label {
+  color: #10b981;
+  font-weight: 600;
+}
+/* Nhãn bước hiện tại — cam đậm */
+.tl-step.current .tl-label {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Đường ngang nối các bước — định vị tuyệt đối so với .tl-step */
+.tl-line {
+  position: absolute;
+  top: 13px; /* Căn giữa chiều cao nút tròn (26px / 2 = 13px) */
+  left: 50%; /* Bắt đầu từ giữa nút, kéo sang phải */
+  width: 100%;
+  height: 2px;
+  background: var(--border); /* Màu xám mặc định */
+  z-index: 0; /* Nằm dưới nút tròn */
+}
+/* Đường nối bước đã xong — đổi sang màu xanh */
+.tl-line.done {
+  background: #10b981;
+}
+
+/* ── Danh sách sản phẩm trong đơn ── */
+
+/* Vùng chứa các sản phẩm */
+.order-items-list {
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* Mỗi dòng sản phẩm: ảnh | tên+số lượng | giá */
+.order-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Ảnh sản phẩm nhỏ */
+.order-item-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  flex-shrink: 0; /* Không co lại khi hẹp */
+}
+
+/* Placeholder khi không có ảnh — nền xám */
+.order-item-img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-gray);
+}
+
+/* Cột giữa: tên sản phẩm + số lượng */
+.order-item-desc {
+  flex: 1; /* Chiếm hết không gian còn lại */
+  min-width: 0; /* Cho phép text-overflow hoạt động trong flex */
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* Tên sản phẩm — cắt bớt nếu quá dài */
+.order-item-name {
+  font-size: 0.88rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Hiển thị "..." khi tên quá dài */
+}
+
+/* Số lượng sản phẩm */
+.order-item-qty {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+/* Giá từng sản phẩm bên phải */
+.order-item-price {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap; /* Không xuống hàng */
+}
+
+/* ── Footer card: tổng tiền + phương thức thanh toán ── */
+
+/* Footer nằm ngang giữa thông tin thanh toán (trái) và tổng tiền (phải) */
+.order-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-gray); /* Nền xám giống header */
+  border-top: 1.5px solid var(--border);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Nhóm trái: phương thức + trạng thái thanh toán */
+.order-card-footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+/* Phương thức thanh toán (COD / VNPay) */
+.order-pay-method {
+  font-size: 0.87rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Trạng thái thanh toán — màu thay đổi theo JS */
+.order-pay-status {
+  font-size: 0.87rem;
+  font-weight: 600;
+}
+
+/* Nhóm phải: nhãn "Tổng" + số tiền */
+.order-total-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Chữ "Tổng" nhỏ, đứng trước số tiền */
+.order-total-label {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+/* Số tiền tổng — var(--primary) (cam thương hiệu) + font-size lớn nhất trong card, vì đây là
+   thông tin khách quan tâm nhất khi rà danh sách đơn hàng, đồng bộ quy ước "tiền = màu cam" như
+   .item-total trong cart.css. */
+.order-total-amount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+}

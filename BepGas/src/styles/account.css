@@ -1,0 +1,2292 @@
+/* =======================================================
+   TRANG TÀI KHOẢN — Layout chính sidebar + nội dung
+======================================================= */
+
+/* Padding dọc trang tài khoản */
+.account-page {
+  padding: 3rem 0 5rem;
+}
+/* Tiêu đề trang */
+.account-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--secondary);
+}
+/* 2 cột: sidebar cố định 260px + nội dung linh hoạt */
+.account-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .account-layout {
+    grid-template-columns: 1fr; /* Mobile: 1 cột */
+  }
+}
+
+/* Sidebar tài khoản — sticky, viền mờ, bóng nhẹ */
+.account-sidebar {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: sticky;
+  top: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+}
+
+/* ── HỘP AVATAR — Nền gradient tối + chữ tên email ── */
+
+/* Header sidebar: nền navy, tên + email + avatar */
+.account-avatar-box {
+  padding: 2rem 1.5rem 1.6rem;
+  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden; /* Cắt vòng trang trí nếu tràn */
+}
+/* Vòng trang trí góc trên phải — cam nhạt */
+.account-avatar-box::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(232, 93, 4, 0.12);
+}
+/* Vòng trang trí góc dưới trái — trắng siêu nhạt */
+.account-avatar-box::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+}
+/* Avatar tròn — gradient cam, chữ cái đầu tên */
+.account-avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, #c44d00 100%);
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.3rem;
+  box-shadow:
+    0 0 0 4px rgba(232, 93, 4, 0.25), /* Hào quang cam nhạt */
+    0 4px 16px rgba(232, 93, 4, 0.35); /* Bóng cam */
+  position: relative;
+  z-index: 1; /* Nổi trên vòng pseudo */
+}
+/* Tên người dùng — trắng đậm */
+.account-avatar-box strong {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  position: relative;
+  z-index: 1;
+}
+/* Email — trắng mờ, cắt "..." nếu quá dài */
+.account-avatar-box > span:not(.account-member-badge) {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── NAV SIDEBAR — Danh sách menu điều hướng ── */
+
+.account-nav {
+  padding: 0.5rem 0.5rem;
+}
+/* Từng mục menu */
+.account-nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  transition: all 0.15s;
+  text-align: left;
+  border-radius: 8px;
+  margin-bottom: 0.15rem;
+}
+.account-nav-item:hover {
+  background: var(--bg-gray);
+  color: var(--primary);
+}
+/* Mục đang active — nền cam nhạt, chữ cam đậm */
+.account-nav-item.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Cột nội dung — xếp dọc các card */
+.account-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+/* Card nội dung — trắng, viền, padding */
+.account-card {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+}
+/* Tiêu đề trong từng card (VD: "Thông tin tài khoản") */
+.account-card h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--secondary);
+}
+
+/* ── FORM THÔNG TIN TÀI KHOẢN ── */
+
+/* Form dọc, tối đa 480px tránh quá rộng */
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-width: 480px;
+}
+.account-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.account-form label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+/* Wrapper cho icon cố định trái */
+.account-form .input-wrap {
+  position: relative;
+}
+.account-form .input-wrap .input-icon {
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+}
+/* Input có icon trái — padding trái đủ chỗ cho icon */
+.account-form input {
+  width: 100%;
+  padding: 0.65rem 0.9rem 0.65rem 2.4rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.account-form input:focus {
+  border-color: var(--primary);
+}
+/* Input disabled — xám rõ hơn --bg-gray, không thể tương tác */
+.account-form .input-disabled,
+.account-form input[disabled] {
+  background: #eef0f3 !important;
+  color: #9ca3af !important;
+  border-color: #e2e8f0 !important;
+  cursor: not-allowed;
+  opacity: 1; /* Tắt dimming mặc định của browser để màu rõ */
+}
+/* Nút hiện/ẩn mật khẩu */
+.account-form .pwd-toggle {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+}
+/* Gợi ý nhỏ bên dưới input */
+.field-hint {
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+
+/* Alert thành công / lỗi */
+.account-alert {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Biến thể thành công — xanh lá */
+.alert-success {
+  background: #d1fae5;
+  color: #065f46;
+}
+/* Biến thể lỗi — đỏ */
+.alert-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Trạng thái loading và rỗng */
+.account-loading {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+}
+/* Trạng thái trống — chưa có đơn hàng/địa chỉ/đánh giá... */
+.account-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
+  text-align: center;
+  color: var(--text-light);
+}
+
+/* Danh sách đơn hàng dọc */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Banner cảnh báo đơn VNPay chưa thanh toán — vàng */
+.vnpay-pending-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  background: #fffbeb;
+  border: 1.5px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  color: #92400e;
+  font-size: 0.88rem;
+}
+
+/* ── FILTER PILLS — Sticky dưới header khi cuộn ── */
+
+/* Hàng filter cuộn ngang, sticky dưới header 56px */
+.order-filter-pills {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Scroll mượt trên iOS */
+  scrollbar-width: none; /* Ẩn scrollbar Firefox */
+  padding: 0.75rem 1.75rem;
+  margin: -0.75rem -1.75rem 1rem; /* Âm để khớp với padding card cha */
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 56px;
+  z-index: 9;
+}
+.order-filter-pills::-webkit-scrollbar {
+  display: none; /* Ẩn scrollbar Chrome */
+}
+/* Nút filter từng trạng thái */
+.ofp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.87rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0; /* Không co khi container chật */
+}
+.ofp-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+/* Pill đang active — nền cam đặc, trắng */
+.ofp-btn.ofp-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+/* Badge số lượng trong pill */
+.ofp-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.3); /* Trắng mờ khi active */
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0 4px;
+}
+/* Badge trên pill không active — cam đặc */
+.ofp-btn:not(.ofp-active) .ofp-count {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* =======================================================
+   CARD ĐƠN HÀNG STYLE SHOPEE (soc-*)
+   Header: mã + ngày + badge | Items | Footer: tổng + actions
+======================================================= */
+
+/* Card container — viền nhạt, hover bóng */
+.shopee-order-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.shopee-order-card:hover {
+  box-shadow: var(--shadow);
+}
+
+/* Header card: mã + ngày bên trái | badge phải */
+.soc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.1rem;
+  background: var(--bg-gray);
+  border-bottom: 1px solid var(--border);
+}
+.soc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Mã đơn hàng — đậm, click được */
+.soc-code {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--secondary);
+}
+/* Nút mã đơn — underline animate khi hover */
+.soc-code-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition:
+    color 0.15s,
+    text-decoration-color 0.15s;
+}
+.soc-code-btn:hover {
+  color: var(--primary);
+  text-decoration-color: var(--primary);
+}
+/* Ngày đặt hàng */
+.soc-date {
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+/* Text trạng thái đơn — in hoa nhỏ */
+.soc-status-text {
+  font-size: 0.87rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* Danh sách sản phẩm trong card */
+.soc-items {
+  padding: 0.25rem 0;
+}
+/* Hàng sản phẩm: ảnh + thông tin + giá */
+.soc-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+.soc-item-row:last-child {
+  border-bottom: none;
+}
+/* Thumbnail ảnh sản phẩm — vuông 60px */
+.soc-item-img-wrap {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-gray);
+}
+.soc-item-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Placeholder khi không có ảnh */
+.soc-item-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Thông tin sản phẩm trong hàng */
+.soc-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+/* Tên sản phẩm — cắt "..." */
+.soc-item-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Biến thể đã chọn (màu/size...) nếu có */
+.soc-item-variant {
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+/* Số lượng sản phẩm */
+.soc-item-qty {
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+/* Giá từng sản phẩm — cam đậm */
+.soc-item-price {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+/* Footer card: tổng tiền + nút hành động */
+.soc-footer {
+  padding: 0.75rem 1.1rem;
+  border-top: 1px solid var(--border);
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+/* Thông tin thanh toán */
+.soc-pay-info {
+  font-size: 0.8rem;
+}
+/* Hàng tổng tiền — phải */
+.soc-total-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.soc-total-label {
+  font-size: 0.87rem;
+  color: var(--text-light);
+}
+/* Số tổng tiền — cam to đậm */
+.soc-total-amount {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+/* Hàng nút hành động — phải, wrap nếu hẹp */
+.soc-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+/* ── Hệ thống 4 cấp độ nút hành động trên mỗi đơn hàng — phân biệt bằng MỨC ĐỘ ĐẶC của màu cam,
+   không phải bằng các màu khác nhau, để khách vẫn nhận ra tất cả đều liên quan tới đơn hàng này:
+   1. .soc-btn-primary — cam đặc + chữ trắng: hành động ƯU TIÊN NHẤT (Mua lại, Thanh toán ngay).
+   2. .soc-btn-return  — viền cam + nền cam nhạt: hành động QUAN TRỌNG nhưng không phải chính
+      (Yêu cầu hoàn trả) — màu dùng #f97316 riêng (không phải var(--primary)) vì đây vốn được
+      thiết kế đồng bộ với khối "hoàn trả" màu cam-cháy trong AdminOrders, không phải ngẫu nhiên.
+   3. .soc-btn-secondary — viền xám, hover mới chuyển cam: hành động PHỤ (Hủy đơn, Xem biên lai).
+   4. .soc-btn-detail — viền mảnh, chữ xám nhạt nhất: hành động ÍT QUAN TRỌNG NHẤT (chỉ là "Xem
+      chi tiết", luôn có sẵn, không cần nổi bật). ── */
+
+/* Nút hành động chính (Mua lại, Thanh toán...) — cam đặc */
+.soc-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+.soc-btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+.soc-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Nút hành động phụ (Hủy, Xem biên lai...) — trắng, viền */
+.soc-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+  text-decoration: none;
+}
+.soc-btn-secondary:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.soc-btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Nút Chi tiết — nhẹ hơn, xám, viền mảnh */
+.soc-btn-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-light);
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.soc-btn-detail:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Nút Hoàn trả — cam nhạt, viền cam */
+.soc-btn-return {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid #f97316;
+  color: #f97316;
+  background: #fff7ed;
+  transition: background 0.15s;
+}
+.soc-btn-return:hover:not(:disabled) {
+  background: #fed7aa;
+}
+.soc-btn-return:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Badge đôi trong header card: trạng thái + thanh toán */
+.soc-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+/* Badge trạng thái đơn — màu nền theo trạng thái */
+.soc-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+/* Badge thanh toán — xám nhỏ hơn */
+.soc-pay-badge {
+  font-size: 0.87rem;
+  font-weight: 500;
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
+/* Nút "Xem thêm N sản phẩm" — cam nhạt toàn chiều rộng */
+.soc-show-more-btn {
+  width: 100%;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.8rem;
+  color: var(--primary);
+  font-weight: 500;
+  background: var(--primary-light);
+  border: none;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s;
+}
+.soc-show-more-btn:hover {
+  background: #fddcbb;
+}
+
+/* Tên sản phẩm dạng link trong modal chi tiết */
+.soc-item-name-link {
+  color: var(--text);
+  text-decoration: none;
+}
+.soc-item-name-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Link "Đánh giá" per-item dưới tên sản phẩm */
+.soc-item-review-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+  margin-top: 2px;
+  transition: opacity 0.15s;
+}
+.soc-item-review-link:hover {
+  opacity: 0.75;
+  text-decoration: underline;
+}
+
+/* Hàng tổng footer — phải + margin bottom cho actions */
+.soc-total-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MODAL CHI TIẾT ĐƠN HÀNG (odm-*)
+   Popup 540px rộng, scroll nội dung, tiêu đề sticky
+══════════════════════════════════════════════════════════ */
+
+/* Modal wrapper — chiều cao tối đa 88vh, không tràn */
+.order-detail-modal {
+  width: 540px;
+  max-width: calc(100vw - 2rem);
+  max-height: 88vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* Body modal scroll */
+.order-detail-body {
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+}
+/* Hàng badge (trạng thái + thanh toán) */
+.odm-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+/* Section trong modal — dọc */
+.odm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+/* Tiêu đề section — chữ hoa nhỏ, gạch chân */
+.odm-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+  margin: 0;
+}
+/* Tên người nhận địa chỉ */
+.odm-addr-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+/* Chi tiết địa chỉ — xám, dòng rộng */
+.odm-addr-detail {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.6;
+}
+/* Bảng phí: tạm tính, phí ship, giảm giá */
+.odm-fees {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+/* Từng dòng phí — hai đầu */
+.odm-fee-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+/* Số tiền màu xanh (phí ship miễn phí / giảm giá) — xanh lá báo hiệu "có lợi cho khách", cùng
+   quy ước với .free-shipping (cart.css) và .add-to-cart-btn.added (home.css). */
+.odm-fee-green {
+  color: #10b981;
+}
+/* Dòng tổng cộng — viền trên, cam đậm */
+.odm-fee-total {
+  border-top: 1px solid var(--border);
+  padding-top: 0.4rem;
+  margin-top: 0.15rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--primary);
+}
+/* Phương thức thanh toán */
+.odm-pay-method {
+  font-size: 0.87rem;
+  color: var(--text-light);
+  margin: 0;
+}
+/* Lý do hủy/hoàn — nền xám, viền trái cam */
+.odm-reason-text {
+  font-size: 0.88rem;
+  background: var(--bg-gray);
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  margin: 0;
+  border-left: 3px solid #f97316;
+}
+
+/* Responsive mobile: header card xếp dọc */
+@media (max-width: 600px) {
+  .soc-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .soc-header-badges {
+    justify-content: flex-start;
+  }
+  .soc-actions {
+    justify-content: flex-start;
+  }
+  .order-filter-pills {
+    top: 48px; /* Header mobile thấp hơn */
+  }
+}
+
+/* =======================================================
+   ĐỊA CHỈ GIAO HÀNG (addr-*)
+   Form thêm/sửa + danh sách thẻ địa chỉ
+======================================================= */
+
+/* Hộp form thêm/sửa địa chỉ */
+.addr-form-box {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  background: var(--bg-gray);
+}
+/* Tiêu đề "Thêm địa chỉ mới" / "Sửa địa chỉ" */
+.addr-form-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+/* Grid 2 cột cho các field: họ/tên, tỉnh/quận... */
+.addr-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+@media (max-width: 540px) {
+  .addr-form-grid {
+    grid-template-columns: 1fr; /* Mobile: 1 cột */
+  }
+}
+.addr-form-box .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+.addr-form-box .form-group:last-of-type {
+  margin-bottom: 0;
+}
+.addr-form-box label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.addr-form-box input {
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+  background: var(--bg);
+}
+.addr-form-box input:focus {
+  border-color: var(--primary);
+}
+/* Checkbox "Đặt làm mặc định" */
+.addr-default-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  margin: 0.5rem 0;
+  cursor: pointer;
+}
+.addr-default-check input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+/* Nút Lưu / Hủy form */
+.addr-form-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+/* Danh sách thẻ địa chỉ đã lưu */
+.addr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+/* Thẻ địa chỉ — hàng ngang icon + nội dung + nút */
+.addr-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  transition: border-color 0.15s;
+}
+/* Địa chỉ mặc định — viền cam, nền cam siêu nhạt */
+.addr-card-default {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+/* Icon địa chỉ trái */
+.addr-card-icon {
+  flex-shrink: 0;
+  padding-top: 0.15rem;
+}
+/* Nội dung giữa — tên, số điện thoại, địa chỉ */
+.addr-card-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+/* Tên người nhận + badge "Mặc định" */
+.addr-card-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Số điện thoại người nhận */
+.addr-card-phone {
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+/* Địa chỉ đầy đủ */
+.addr-card-address {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+/* Badge "Mặc định" — cam nhỏ góc */
+.addr-default-badge {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+/* Nhóm nút Sửa / Xóa bên phải */
+.addr-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+/* Nút hành động địa chỉ — outline pill nhỏ */
+.addr-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.88rem;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.addr-action-link:hover {
+  background: var(--primary-light);
+}
+/* Nút Xóa — đỏ */
+.addr-action-del {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+.addr-action-del:hover {
+  background: #fee2e2;
+}
+
+/* =======================================================
+   TRANG WISHLIST — Lưới sản phẩm yêu thích
+======================================================= */
+
+.wishlist-page {
+  padding: 3rem 0 5rem;
+}
+/* Header: tiêu đề + đếm số lượng */
+.wishlist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.wishlist-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+.wishlist-header span {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+.wishlist-loading {
+  display: flex;
+  justify-content: center;
+  padding: 4rem;
+}
+/* Lưới tự động: tối thiểu 220px mỗi card */
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Card sản phẩm wishlist */
+.wishlist-card {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+.wishlist-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+/* Nút X xóa khỏi wishlist — góc trên phải, tròn */
+.wishlist-remove {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef4444;
+  border: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.wishlist-remove:hover {
+  background: #fee2e2;
+}
+/* Ảnh sản phẩm — tỷ lệ vuông 1:1 */
+.wishlist-card-img {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--bg-gray);
+}
+.wishlist-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.wishlist-card:hover .wishlist-card-img img {
+  transform: scale(1.05);
+}
+/* Thông tin card */
+.wishlist-card-info {
+  padding: 0.9rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+/* Tên — 2 dòng cắt "..." */
+.wishlist-card-info h3 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Hàng giá — giá gốc + giá giảm */
+.wishlist-price {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* Nút tim wishlist — trạng thái đã yêu thích. #e85d04 ở đây và .detail-wishlist-btn bên dưới là
+   giá trị HEX TRỰC TIẾP của var(--primary) (xem base.css :root) — viết tay thay vì dùng biến vì
+   2 nơi này nằm ở component dùng chung, được code trước khi quy ước "luôn dùng biến" thành hình;
+   vẫn LUÔN PHẢI đồng bộ tay với --primary nếu sau này đổi màu thương hiệu. */
+.wishlist-btn.wishlisted {
+  background: #fff0eb;
+  border-color: #e85d04;
+}
+.wishlist-btn {
+  transition:
+    background 0.2s,
+    transform 0.15s;
+}
+.wishlist-btn:hover {
+  transform: scale(1.15); /* Phóng to nhẹ khi hover */
+}
+
+/* Nút wishlist trang chi tiết sản phẩm — vuông 48px */
+.detail-wishlist-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.detail-wishlist-btn:hover {
+  border-color: #e85d04;
+  color: #e85d04;
+  transform: scale(1.05);
+}
+.detail-wishlist-btn.wishlisted {
+  border-color: #e85d04;
+  background: #fff0eb;
+  color: #e85d04;
+}
+
+/* =======================================================
+   TRANG CHI TIẾT ĐƠN HÀNG — /account/orders/:id (od-*)
+   Layout 2 cột: nội dung chính + cột bên sticky
+======================================================= */
+
+/* Trang chi tiết đơn — giới hạn chiều rộng để dễ đọc */
+.od-page {
+  padding: 3rem 0 5rem;
+  max-width: 1000px;
+}
+/* Loading / Error state */
+.od-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 4rem;
+  color: var(--text-light);
+}
+.od-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem;
+  text-align: center;
+}
+
+/* Breadcrumb "Tài khoản > Đơn hàng > #ORD-xxx" */
+.od-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.od-breadcrumb a {
+  color: var(--text-light);
+  transition: color 0.15s;
+}
+.od-breadcrumb a:hover {
+  color: var(--primary);
+}
+.od-breadcrumb span:last-child {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Banner thông báo hành động thành công — xanh lá, fade in */
+.od-action-msg {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+  animation: fadeIn 0.2s;
+}
+
+/* Header trang: nút back + tiêu đề + badge trạng thái */
+.od-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.od-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+/* Nút quay lại — vuông, hover viền cam */
+.od-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.od-back-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+/* Tiêu đề "Đơn hàng #ORD-xxx" */
+.od-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--secondary);
+  margin: 0;
+}
+/* Ngày đặt hàng dưới tiêu đề */
+.od-date {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0.15rem 0 0;
+}
+/* Badge trạng thái + thanh toán header */
+.od-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.od-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.od-pay-badge {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+/* Grid 2 cột: nội dung chính + sidebar 320px */
+.od-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 1.25rem;
+  align-items: start;
+}
+.od-col-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+/* Cột bên sticky — tổng tiền + nút hành động */
+.od-col-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 70px;
+}
+
+/* Card trắng viền — dùng cho từng section */
+.od-card {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+/* Tiêu đề section trong card */
+.od-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin: 0 0 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── TIMELINE TIẾN TRÌNH ĐƠN ── */
+
+/* Timeline ngang: Đặt hàng → Xác nhận → Giao hàng → Nhận hàng */
+.od-timeline {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+/* Từng bước trong timeline */
+.od-tl-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+/* Đường nối giữa các bước — xám mặc định */
+.od-tl-line {
+  position: absolute;
+  top: 13px; /* Căn giữa với dot 26px */
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+}
+/* Đường nối đã hoàn thành — xanh lá */
+.od-tl-line.od-tl-fill {
+  background: #10b981;
+}
+/* Chấm tròn tại mỗi bước */
+.od-tl-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg-gray);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  z-index: 1; /* Nổi trên đường line */
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+/* Bước hoàn thành — xanh lá nhạt */
+.od-tl-dot.od-tl-done {
+  background: #dcfce7;
+  border-color: #10b981;
+  color: #10b981;
+}
+/* Bước hiện tại — cam đậm, hào quang */
+.od-tl-dot.od-tl-active {
+  background: var(--primary);
+  border-color: var(--primary-dark);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.18);
+}
+/* Nhãn bước — nhỏ, căn giữa */
+.od-tl-label {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 0.35rem;
+  text-align: center;
+}
+.od-tl-label.od-tl-label-done {
+  color: #10b981;
+  font-weight: 600;
+}
+.od-tl-label.od-tl-label-active {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ── LỊCH SỬ TRẠNG THÁI ĐƠN (vertical timeline) ── */
+
+.od-hist-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+/* Từng sự kiện lịch sử */
+.od-hist-item {
+  display: flex;
+  gap: 1rem;
+}
+/* Cột chấm + đường kết nối */
+.od-hist-dot-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 24px;
+  padding-top: 4px;
+}
+/* Chấm tròn sự kiện */
+.od-hist-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg-gray);
+  flex-shrink: 0;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+/* Đường dọc nối các sự kiện */
+.od-hist-connector {
+  flex: 1;
+  width: 2px;
+  background: var(--border);
+  margin: 5px 0;
+  min-height: 18px;
+}
+/* Nội dung sự kiện — trạng thái + ghi chú + thời gian */
+.od-hist-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-bottom: 1.4rem;
+  flex: 1;
+}
+.od-hist-item:last-child .od-hist-body {
+  padding-bottom: 0;
+}
+/* Tên trạng thái (VD: "Đã xác nhận") */
+.od-hist-status {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+/* Ghi chú đi kèm sự kiện (lý do hủy, lý do giao thất bại...) */
+.od-hist-note {
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+/* Link "Xem ảnh" minh chứng nếu có */
+.od-hist-img-link {
+  font-size: 0.88rem;
+  color: var(--primary);
+}
+/* Thời gian sự kiện */
+.od-hist-time {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+/* Lý do hủy đơn — nền xám, viền trái cam */
+.od-reason {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--bg-gray);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  color: var(--text);
+  border-left: 3px solid #f97316;
+}
+
+/* ── DANH SÁCH SẢN PHẨM TRONG ĐƠN ── */
+
+.od-items {
+  display: flex;
+  flex-direction: column;
+}
+/* Hàng sản phẩm: ảnh 64px + tên + giá */
+.od-item-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.od-item-row:last-child {
+  border-bottom: none;
+}
+/* Thumbnail vuông 64px */
+.od-item-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.od-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Thông tin sản phẩm */
+.od-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+/* Tên sản phẩm — link, cắt "..." */
+.od-item-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+a.od-item-name:hover {
+  color: var(--primary);
+}
+.od-item-qty {
+  font-size: 0.82rem;
+  color: var(--text-light);
+}
+/* Nút "Đánh giá" per-item — pill cam nhỏ */
+.od-review-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
+  border: 1.5px solid var(--primary);
+  background: #fff7ed;
+  transition: background 0.15s;
+}
+.od-review-link:hover {
+  background: #fed7aa;
+}
+/* Đã đánh giá — xanh lá */
+.od-review-link.od-review-done {
+  color: #10b981;
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+.od-review-link.od-review-done:hover {
+  background: #dcfce7;
+}
+/* Giá sản phẩm — căn phải */
+.od-item-price-wrap {
+  text-align: right;
+  flex-shrink: 0;
+}
+/* Đơn giá nhỏ */
+.od-item-unit {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+/* Thành tiền — cam đậm */
+.od-item-total {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ── ĐỊA CHỈ GIAO HÀNG TRONG ĐƠN ── */
+
+.od-addr {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.od-addr-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--secondary);
+  margin: 0;
+}
+.od-addr-phone,
+.od-addr-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ── BẢNG PHÍ THANH TOÁN ── */
+
+.od-fees {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+}
+/* Từng dòng phí — hai đầu */
+.od-fee-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+/* Xanh lá cho phí miễn phí / giảm giá */
+.od-fee-green {
+  color: #10b981;
+}
+/* Divider ngang */
+.od-fee-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.25rem 0;
+}
+/* Dòng tổng cộng — cam đậm */
+.od-fee-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+/* Phương thức thanh toán — xám, gạch trên */
+.od-pay-method {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 0.6rem;
+}
+
+/* ── NÚT HÀNH ĐỘNG CỘT BÊN ── */
+
+.od-actions-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+/* Nút hành động toàn chiều rộng */
+.od-action-btn {
+  width: 100%;
+  justify-content: center;
+  gap: 0.4rem;
+}
+/* Nút Hoàn trả — cam nhạt, toàn chiều rộng */
+.od-return-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  font-weight: 600;
+  border: 1.5px solid #f97316;
+  color: #f97316;
+  background: #fff7ed;
+  cursor: pointer;
+  transition: background 0.15s;
+  width: 100%;
+}
+.od-return-btn:hover:not(:disabled) {
+  background: #fed7aa;
+}
+.od-return-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+/* Ghi chú hết hạn hoàn trả */
+.od-return-expired {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0;
+}
+/* Ghi chú đang chờ xử lý hoàn trả */
+.od-return-pending-note {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #f97316;
+  margin: 0;
+}
+
+/* Responsive mobile: 1 cột, bỏ sticky sidebar */
+@media (max-width: 768px) {
+  .od-grid {
+    grid-template-columns: 1fr;
+  }
+  .od-col-side {
+    position: static;
+  }
+  .od-title {
+    font-size: 1.05rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   BẢO HÀNH + BIÊN LAI HOÀN TIỀN (od-warranty-*, od-receipt-*)
+   Hiển thị trong card đơn hàng chi tiết và modal
+══════════════════════════════════════════════════════════ */
+
+/* Hàng từng sản phẩm trong bảng bảo hành */
+.od-warranty-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.od-warranty-row:last-child {
+  border-bottom: none;
+}
+/* Tên sản phẩm trái */
+.od-warranty-name {
+  color: var(--text);
+  flex: 1;
+  font-weight: 500;
+}
+/* Cột phải: số tháng, ngày, trạng thái */
+.od-warranty-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+}
+/* Số tháng bảo hành (VD: "12 tháng") */
+.od-warranty-months {
+  font-size: 0.82rem;
+  color: var(--text-light);
+}
+/* Ngày bắt đầu – kết thúc bảo hành */
+.od-warranty-dates {
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+/* Trạng thái bảo hành — màu set riêng ở các class .od-warranty-active/expiring/expired bên dưới */
+.od-warranty-status {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+/* Không có bảo hành */
+.od-warranty-none {
+  color: #9ca3af;
+  font-size: 0.82rem;
+}
+/* Chưa kích hoạt (chưa giao hàng) */
+.od-warranty-not-started-note {
+  font-size: 0.83rem;
+  color: var(--text-light);
+  font-style: italic;
+  margin: 0 0 0.5rem;
+}
+/* Màu theo trạng thái bảo hành */
+.od-warranty-active {
+  color: #10b981; /* Đang còn hạn — xanh lá */
+}
+.od-warranty-expiring {
+  color: #f97316; /* Sắp hết — cam cảnh báo */
+}
+.od-warranty-expired {
+  color: #ef4444; /* Hết hạn — đỏ */
+}
+.od-warranty-not_started {
+  color: #6b7280; /* Chưa bắt đầu — xám */
+}
+.od-warranty-valid {
+  color: #10b981;
+  font-weight: 600;
+}
+
+/* Ảnh biên lai hoàn tiền — tối đa 260px, bo góc */
+.od-receipt-img {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: block;
+  margin: 0.5rem 0;
+}
+/* Ghi chú bên dưới biên lai */
+.od-receipt-hint {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0.25rem 0 0.75rem;
+}
+/* Nút upload minh chứng chuyển khoản */
+.od-receipt-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  transition: background 0.15s;
+  margin-top: 0.25rem;
+}
+.od-receipt-upload-btn:hover {
+  background: var(--primary-light, #eff6ff);
+}
+
+/* ══════════════════════════════════════════════════════════
+   BLOCK THÔNG TIN HOÀN TRẢ — hiển thị trong chi tiết đơn
+   Dùng cho phía khách: OrderDetail.jsx
+══════════════════════════════════════════════════════════ */
+
+/* Grid 2 cột: label | value — mỗi hàng 1 thông tin */
+.od-return-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.5rem;
+}
+
+/* Mỗi yêu cầu hoàn trả là 1 card — đơn có thể có nhiều yêu cầu (hoàn nhiều lần từng phần) */
+.od-return-request-card + .od-return-request-card {
+  margin-top: 1.1rem;
+  padding-top: 1.1rem;
+  border-top: 1.5px dashed var(--border);
+}
+
+/* ══════════════════════════════════════════════════════════
+   BANNER TRẠNG THÁI — hiện dưới header khi đơn đã giao/hủy/hoàn
+   Màu xanh = giao thành công, đỏ = hủy, cam = hoàn trả
+══════════════════════════════════════════════════════════ */
+
+/* Banner chung: flex ngang, căn giữa dọc, bo góc */
+.od-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.925rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  border: 1px solid transparent;
+}
+
+/* Đã giao thành công — nền xanh lá nhạt */
+.od-status-banner-delivered {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+/* Đã hủy — nền đỏ nhạt */
+.od-status-banner-cancelled {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+/* Đã hủy nhưng đã hoàn tiền xong — kết quả tích cực, dùng nền xanh thành công */
+.od-status-banner-refunded {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+/* Đã hoàn trả — nền cam nhạt */
+.od-status-banner-returned {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SUMMARY STRIP — dải 3 cột thông tin nhanh dưới header
+   Hiện: Giao tới | Ngày đặt | Tổng cộng
+══════════════════════════════════════════════════════════ */
+
+/* Dải ngang 3 phần bằng nhau, có đường ngăn cách */
+.od-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* Mỗi ô thông tin: flex dọc, có viền phải trừ ô cuối */
+.od-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.7rem 1rem;
+  border-right: 1px solid var(--border);
+}
+.od-summary-item:last-child {
+  border-right: none;
+}
+
+/* Nhãn nhỏ mờ phía trên */
+.od-summary-label {
+  font-size: 0.72rem;
+  color: var(--text-light);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Giá trị chính — đậm, to hơn nhãn */
+.od-summary-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dòng phụ nhỏ bên dưới giá trị */
+.od-summary-sub {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ══════════════════════════════════════════════════════════
+   LỊCH SỬ THU GỌN — nút toggle mở/đóng lịch sử giao hàng
+══════════════════════════════════════════════════════════ */
+
+/* Nút mở rộng/thu gọn lịch sử — style link nhỏ */
+.od-hist-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.6rem;
+  padding: 0.3rem 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+.od-hist-toggle:hover {
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════════════════════
+   BẢO HÀNH DẠNG CARD — mỗi sản phẩm 1 card full-width
+   Thay thế cột sidebar 320px bằng danh sách dọc rộng hơn
+══════════════════════════════════════════════════════════ */
+
+/* Danh sách card bảo hành, xếp dọc */
+.od-warranty-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+/* Mỗi card bảo hành: có viền trái màu theo trạng thái */
+.od-warranty-item {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg, #fafafa);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* Hàng trên: icon + tên sản phẩm + badge */
+.od-wi-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+/* Tên sản phẩm — có thể xuống dòng */
+.od-wi-name {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* Badge trạng thái bảo hành */
+.od-wi-badge {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Màu badge theo trạng thái — lặp lại đúng hệ 4 màu đã dùng ở .od-warranty-active/expiring/
+   expired/not_started phía trên (xanh lá còn hạn → cam sắp hết → đỏ hết hạn → xám chưa kích
+   hoạt), chỉ đổi từ "chữ màu trên nền trắng" sang "badge có nền màu" cho phù hợp layout card. */
+.od-wi-badge-active {
+  background: #dcfce7;
+  color: #15803d;
+}
+.od-wi-badge-expiring {
+  background: #fff7ed;
+  color: #c2410c;
+}
+.od-wi-badge-expired {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.od-wi-badge-not_started {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Hàng dưới: chi tiết ngày tháng */
+.od-wi-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-left: 1.5rem;
+}
+.od-wi-details strong {
+  color: var(--text);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ACTIONS INLINE — hành động gộp trong card thanh toán
+   Thay thế card hành động riêng biệt
+══════════════════════════════════════════════════════════ */
+
+/* Vùng hành động bên dưới tổng tiền, trong card thanh toán */
+.od-actions-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Một hàng thông tin hoàn trả */
+.od-return-info-row {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  align-items: flex-start;
+}
+
+/* Nhãn bên trái — cố định chiều rộng để các value thẳng hàng */
+.od-return-info-label {
+  flex-shrink: 0;
+  width: 130px;
+  font-weight: 600;
+  color: var(--text-light);
+  padding-top: 1px;
+}
+
+/* Giá trị bên phải */
+.od-return-info-value {
+  flex: 1;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Header mỗi card yêu cầu hoàn trả: mã reqCode + timeline ngắn */
+.od-return-req-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Mã reqCode của yêu cầu hoàn trả — monospace để dễ phân biệt với chữ thường */
+.od-return-req-code {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+}
+
+/* Link "In phiếu" mở trang biên lai hoàn trả của riêng reqCode này */
+.od-return-print-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.od-return-print-link:hover {
+  background: var(--primary-light);
+}
+
+/* Timeline ngắn ngang: Yêu cầu → Duyệt → (Hoàn tiền) cho 1 reqCode */
+.od-return-timeline {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Từng bước trong timeline ngắn — pill xám mặc định */
+.od-return-timeline-step {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  background: var(--bg-gray);
+  white-space: nowrap;
+}
+
+/* Gạch ngang nhỏ nối giữa 2 bước */
+.od-return-timeline-sep {
+  width: 12px;
+  height: 1.5px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* Bước đã hoàn thành — xanh lá */
+.od-return-timeline-done {
+  color: #10b981;
+  background: #d1fae5;
+}
+
+/* Bước đang chờ xử lý — cam */
+.od-return-timeline-active {
+  color: #f97316;
+  background: #fff7ed;
+}
+
+/* Bước bị từ chối — đỏ */
+.od-return-timeline-rejected {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+/* Badge trạng thái xử lý */
+.od-return-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+}
+.od-return-status-pending  { color: #f97316; background: #fff7ed; }
+.od-return-status-approved { color: #10b981; background: #d1fae5; }
+.od-return-status-rejected { color: #ef4444; background: #fee2e2; }
+
+/* Ảnh minh chứng thumbnail nhỏ, click mở full */
+.od-return-img-proof {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: block;
+  transition: opacity 0.15s;
+}
+.od-return-img-proof:hover {
+  opacity: 0.85;
+}
+
+/* Phản hồi admin — box riêng có màu nền phân biệt */
+.od-return-admin-resp {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+/* Đã duyệt và đã hoàn tiền xong — xanh thành công */
+.od-return-admin-resp.approved {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #065f46;
+}
+/* Đã duyệt nhưng chưa hoàn tiền — chưa nên hiện xanh thành công vì tiền chưa thực sự về tay khách */
+.od-return-admin-resp.pending-refund {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+}
+/* Bị từ chối — đỏ */
+.od-return-admin-resp.rejected {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}

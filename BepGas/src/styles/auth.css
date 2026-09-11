@@ -1,0 +1,388 @@
+/* =======================================================
+   AUTH — Khu vực tài khoản trong header + Trang đăng nhập/đăng ký
+======================================================= */
+
+/* ── Dropdown tài khoản trong header ── */
+
+/* Phần chào khi khách chưa đăng nhập — nền xám nhạt phân biệt */
+.dropdown-guest {
+  padding: 1rem 1.1rem;
+  background: var(--bg-gray);
+  border-bottom: 1px solid var(--border);
+}
+.dropdown-guest p {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  font-style: italic; /* In nghiêng để thân thiện hơn */
+}
+
+/* Item đăng ký — nổi bật màu cam, viền trên phân cách với đăng nhập */
+.register-item {
+  color: var(--primary) !important;
+  font-weight: 600 !important;
+  border-top: 1px solid var(--border);
+}
+.register-item:hover {
+  background: var(--primary-light) !important;
+}
+
+/* Nút tài khoản khi đã đăng nhập — hiện avatar + tên + mũi tên */
+.user-menu {
+  position: relative; /* Anchor để dropdown con absolute đặt đúng chỗ */
+}
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  color: var(--secondary);
+  font-weight: 600;
+  font-size: 0.93rem;
+  transition: background 0.18s;
+  cursor: pointer;
+  border: 1.5px solid transparent; /* Giữ kích thước ổn định khi hover thêm viền */
+}
+.user-btn:hover {
+  background: var(--bg-gray);
+  border-color: var(--border);
+}
+
+/* Vòng tròn avatar — hiện chữ cái đầu tên người dùng */
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary); /* Nền cam */
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Không co lại khi tên quá dài */
+}
+/* Biến thể avatar lớn hơn dùng trong dropdown info */
+.user-avatar.lg {
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+}
+
+/* Tên người dùng — cắt "..." nếu tên quá dài */
+.user-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Mũi tên dropdown — xoay 180° khi đang mở */
+.chevron-up {
+  transform: rotate(180deg);
+  transition: transform 0.2s;
+}
+
+/* Dropdown tài khoản — nổi trên header, bo góc, đổ bóng */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px); /* Cách nút 8px để không che nhau */
+  right: 0; /* Căn phải với nút trigger */
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  min-width: 220px;
+  z-index: 200; /* Trên các element khác */
+  overflow: hidden; /* Bo góc cắt header/footer con */
+  animation: fadeIn 0.15s ease;
+}
+
+/* Hiệu ứng xuất hiện: fade in + trượt từ trên xuống */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px); /* Bắt đầu hơi cao hơn */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header dropdown: avatar lớn + tên + email */
+.dropdown-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+  background: var(--bg-gray); /* Nền xám phân biệt với danh sách */
+}
+.dropdown-info strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--secondary);
+}
+.dropdown-info span {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+/* Đường phân cách giữa các nhóm item */
+.user-dropdown hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* Từng item trong dropdown — hover đổi nền */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%; /* Chiếm toàn chiều rộng dropdown */
+  padding: 0.75rem 1.1rem;
+  font-size: 0.92rem;
+  color: var(--text);
+  transition: background 0.15s;
+  text-align: left;
+  font-weight: 500;
+}
+.dropdown-item:hover {
+  background: var(--bg-gray);
+  color: var(--primary);
+}
+/* Item Đăng xuất — riêng item NÀY hover đổi sang đỏ #ef4444 thay vì cam như mọi item khác trong
+   dropdown, để tách bạch trực quan: đây là hành động "rời khỏi/kết thúc phiên" cần khách dừng
+   lại suy nghĩ 1 chút trước khi bấm, không nên trộn lẫn với các item điều hướng thông thường
+   (đơn hàng, hồ sơ...) đang dùng tông cam hover ở .dropdown-item:hover phía trên. */
+.dropdown-item.logout:hover {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+/* =======================================================
+   TRANG ĐĂNG NHẬP / ĐĂNG KÝ
+======================================================= */
+
+/* Trang auth: chiếm toàn chiều cao còn lại, căn giữa form */
+.auth-page {
+  flex: 1; /* Kết hợp với flex column trên .app để điền không gian còn lại */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.25rem;
+  background: var(--bg-gray); /* Nền xám để card trắng nổi bật */
+}
+
+/* Card chứa form — nổi trên nền xám, bóng đậm */
+.auth-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  padding: 2.5rem 2.25rem;
+  width: 100%;
+  max-width: 460px; /* Không quá rộng để form dễ đọc */
+}
+
+/* Logo thương hiệu ở đầu card */
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--secondary);
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+/* Phần "Gas" trong logo — màu cam */
+.auth-logo strong {
+  color: var(--primary);
+}
+
+/* Tiêu đề form */
+.auth-card h1 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--secondary);
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+/* Phụ đề dưới tiêu đề */
+.auth-subtitle {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 1.75rem;
+  font-size: 0.95rem;
+}
+
+/* Form đăng nhập/đăng ký: stack dọc, cách đều giữa các field */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* Nhóm field: label + input (+ lỗi) */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+/* Nhãn tên field (Email, Mật khẩu...) */
+.form-group label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+/* Wrapper input — relative để đặt icon tuyệt đối bên trong */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Icon (envelope, lock...) cố định bên trái, không chặn click */
+.input-icon {
+  position: absolute;
+  left: 0.9rem;
+  color: var(--text-light);
+  pointer-events: none; /* Click xuyên qua icon vào input */
+}
+
+/* Input trong wrapper — padding trái đủ chỗ icon */
+.input-wrap input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+/* Viền cam khi focus — phản hồi trực quan cho người dùng */
+.input-wrap input:focus {
+  border-color: var(--primary);
+}
+
+/* Input có nút toggle mật khẩu — padding phải thêm để tránh text đè icon */
+.input-wrap:has(.toggle-password) input {
+  padding-right: 2.8rem;
+}
+
+/* Nút ẩn/hiện mật khẩu — cố định bên phải, căn dọc giữa */
+.toggle-password {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+.toggle-password:hover {
+  color: var(--primary);
+}
+
+/* Lỗi bên dưới từng field — đỏ #ef4444, đúng quy ước "đỏ = lỗi/cảnh báo" dùng nhất quán toàn
+   site (cùng mã màu với .clear-cart/.remove-btn trong cart.css, .dropdown-item.logout phía
+   trên) — chỉ khác là ở đây không có nền, vì lỗi field cần gọn, không chiếm nhiều không gian. */
+.field-error {
+  font-size: 0.8rem;
+  color: #ef4444;
+}
+
+/* Lỗi chung cả form — cùng tông đỏ nhưng có thêm NỀN (#fef2f2, đỏ rất nhạt) + viền (#fecaca,
+   đỏ nhạt hơn 1 chút) để tạo thành khối "banner cảnh báo" rõ ràng, khác với .field-error chỉ là
+   chữ đỏ đơn giản — vì lỗi chung (sai mật khẩu, tài khoản không tồn tại) nghiêm trọng hơn, cần
+   nổi bật hơn lỗi validate từng field riêng lẻ. */
+.auth-error {
+  background: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.88rem;
+}
+
+/* Hàng "Ghi nhớ đăng nhập" + link "Quên mật khẩu?" */
+.form-row {
+  display: flex;
+  justify-content: space-between; /* Checkbox trái, link phải */
+  align-items: center;
+  font-size: 0.88rem;
+}
+
+/* Nhãn checkbox — click vào chữ cũng tick được */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Link quên mật khẩu */
+.forgot-link {
+  color: var(--primary);
+  font-weight: 600;
+}
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Layout dọc cho extras: checkbox trên, link quên MK dưới */
+.form-extras {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  font-size: 0.88rem;
+}
+/* Link "Quên mật khẩu" căn phải */
+.form-extras .forgot-link {
+  align-self: flex-end;
+  font-size: 0.84rem;
+  letter-spacing: 0.01em;
+}
+
+/* Nút submit — chiếm full width, cam đậm */
+.auth-btn {
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background 0.2s;
+  margin-top: 0.25rem;
+}
+.auth-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+/* Mờ và không cho click khi đang loading */
+.auth-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Dòng gợi ý chuyển sang đăng nhập/đăng ký */
+.auth-switch {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-top: 1.25rem;
+}
+/* Link "Đăng ký ngay" / "Đăng nhập ngay" trong dòng gợi ý */
+.auth-switch a {
+  color: var(--primary);
+  font-weight: 600;
+}
+.auth-switch a:hover {
+  text-decoration: underline;
+}

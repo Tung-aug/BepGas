@@ -1,0 +1,1390 @@
+/* =======================================================
+   TESTIMONIALS — Đánh giá của khách hàng (trang chủ)
+   border-left tạo đường kẻ cam nổi bật bên trái mỗi card
+======================================================= */
+
+/* Grid 3 cột cho khu vực testimonial */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+/* Card đánh giá — bóng nhẹ + viền cam trái */
+.testimonial-card {
+  background: #fff;
+  padding: 1.75rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--primary); /* Đường viền cam bên trái */
+}
+/* Hàng sao đánh giá */
+.testimonial-stars {
+  display: flex;
+  gap: 0.2rem;
+  margin-bottom: 0.85rem;
+}
+/* Nội dung đánh giá — in nghiêng, dãn dòng */
+.testimonial-card p {
+  color: var(--text);
+  font-style: italic;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+/* Tên người đánh giá */
+.testimonial-card strong {
+  color: var(--secondary);
+  font-size: 0.9rem;
+}
+
+/* =======================================================
+   TRANG SẢN PHẨM — Layout 2 cột: sidebar lọc + lưới
+======================================================= */
+
+/* Trang sản phẩm — flex:1 để lấp đầy chiều cao */
+.products-page {
+  padding: 3.5rem 0 6rem;
+  flex: 1;
+}
+
+/* Tiêu đề trang + tag từ khóa tìm kiếm đang áp dụng */
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+/* Chữ "Sản phẩm" to trong tiêu đề trang */
+.page-title h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+/* Tag hiển thị từ khóa đang tìm — pill cam nhạt + nút X xóa */
+.search-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 0.3rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+}
+/* Nút X xóa từ khóa tìm kiếm trong tag */
+.search-tag button {
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+}
+
+/* Layout 2 cột: sidebar cố định 260px + lưới linh hoạt */
+.products-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+}
+
+/* ── SIDEBAR BỘ LỌC (cũ) ── */
+
+/* Sidebar cũ — sticky, fit-content để không cao quá nội dung */
+.sidebar {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  height: fit-content;
+  position: sticky;
+  top: 120px; /* Bám xuống khi scroll, cách header sticky */
+}
+/* Header sidebar: tiêu đề + nút xóa lọc */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+/* Chữ "Bộ lọc" trong header sidebar */
+.sidebar-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+/* Nút X đóng sidebar mobile — ẩn mặc định (desktop) */
+.close-filter {
+  display: none;
+  color: var(--text-light);
+}
+
+/* Từng section lọc (thương hiệu, giá, danh mục...) */
+.filter-section {
+  margin-bottom: 1.75rem;
+}
+/* Tiêu đề section lọc — nhỏ, viết hoa */
+.filter-section h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Radio button lọc (danh mục, trạng thái...) */
+.filter-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.filter-radio input {
+  accent-color: var(--primary); /* Radio cam */
+}
+.filter-radio:hover {
+  color: var(--primary);
+}
+
+/* Thanh kéo lọc giá (native range) */
+.price-range {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+}
+/* 2 thanh kéo (giá thấp nhất / cao nhất) chiếm full chiều rộng sidebar */
+.price-range input {
+  accent-color: var(--primary);
+  width: 100%;
+}
+
+/* ── TOOLBAR: số kết quả + sắp xếp ── */
+
+/* Toolbar trên lưới sản phẩm — wrap trên mobile */
+.products-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+/* Nút "Bộ lọc" mở sidebar trên mobile — ẩn trên desktop */
+.filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+/* Số lượng sản phẩm tìm được */
+.products-count {
+  color: var(--text-light);
+  font-size: 0.88rem;
+  flex: 1; /* Đẩy dropdown sắp xếp sang phải */
+}
+
+/* Dropdown sắp xếp (Giá tăng dần, Giá giảm dần...) */
+.sort-select {
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  outline: none;
+  color: var(--text);
+}
+.sort-select:focus {
+  border-color: var(--primary);
+}
+
+/* Trạng thái không có sản phẩm — căn giữa, icon lớn */
+.empty-state {
+  text-align: center;
+  padding: 5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+/* Tiêu đề "Không tìm thấy sản phẩm" */
+.empty-state h3 {
+  font-size: 1.25rem;
+  color: var(--secondary);
+}
+/* Gợi ý phụ dưới tiêu đề (đổi từ khóa, bỏ lọc...) */
+.empty-state p {
+  color: var(--text-light);
+}
+
+/* Lớp phủ tối khi sidebar mở trên mobile */
+.overlay {
+  position: fixed;
+  inset: 0; /* Phủ toàn màn hình */
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 40;
+}
+
+/* =======================================================
+   TRANG CHI TIẾT SẢN PHẨM
+======================================================= */
+
+/* Trang chi tiết — padding dọc lớn */
+.product-detail-page {
+  padding: 3.5rem 0 6rem;
+  flex: 1;
+}
+
+/* Link quay lại danh sách */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-light);
+  font-size: 0.88rem;
+  margin-bottom: 1.75rem;
+  transition: color 0.2s;
+}
+.back-link:hover {
+  color: var(--primary);
+}
+
+/* Layout 2 cột: ảnh trái + thông tin phải */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 5rem;
+  align-items: start; /* Không kéo giãn cột theo chiều cao */
+}
+/* Vùng ảnh chính — bo góc, overflow:hidden */
+.detail-image {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+/* Ảnh chính — tỷ lệ 4:3 cố định để layout không nhảy khi đổi ảnh */
+.detail-image img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+/* Tiêu đề sản phẩm */
+.detail-info h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.85rem;
+}
+
+/* Hàng giá chi tiết — giá to hơn card */
+.detail-price {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.4rem;
+}
+.detail-price .price-current {
+  font-size: 1.9rem; /* To hơn giá trong card 1.05rem */
+}
+
+/* Mô tả sản phẩm */
+.detail-description {
+  color: var(--text);
+  line-height: 1.75;
+  margin-bottom: 1.75rem;
+}
+/* Danh sách tính năng nổi bật */
+.detail-features {
+  margin-bottom: 1.75rem;
+}
+/* Tiêu đề "Tính năng nổi bật" */
+.detail-features h4 {
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.85rem;
+}
+/* Bỏ bullet mặc định, xếp các dòng tính năng dọc */
+.detail-features ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+/* Từng dòng tính năng: icon ✓ + text */
+.detail-features li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+
+/* Hàng chọn số lượng + nút "Thêm vào giỏ" */
+.detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Bộ điều chỉnh số lượng: [ − ] số [ + ] */
+.qty-control {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden; /* Bo góc cắt các nút */
+}
+/* Nút tăng/giảm — hover cam */
+.qty-control button {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-gray);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--secondary);
+  transition: background 0.2s;
+}
+.qty-control button:hover {
+  background: var(--primary);
+  color: #fff;
+}
+/* Số lượng hiện tại */
+.qty-control span {
+  padding: 0 1.1rem;
+  font-weight: 600;
+}
+
+/* Cam kết giao hàng + bảo hành dưới nút thêm giỏ */
+.detail-trust {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+/* Từng dòng cam kết (ship/bảo hành) — icon + chữ nằm ngang */
+.detail-trust div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+/* Block dịch vụ lắp đặt — nền cam nhạt, viền cam */
+.detail-install-block {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  margin-top: 0.75rem;
+}
+/* Emoji icon lắp đặt */
+.detail-install-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+/* Chữ "Dịch vụ lắp đặt" đậm */
+.detail-install-block strong {
+  font-size: 0.95rem;
+}
+/* Câu mô tả nhỏ dưới tiêu đề lắp đặt */
+.detail-install-block p {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0.15rem 0 0;
+}
+/* Dòng phí lắp đặt */
+.detail-install-fee {
+  color: var(--text) !important;
+}
+.detail-install-fee strong {
+  color: #c2410c; /* Cam đậm hơn để chú ý giá */
+}
+/* Chữ "(mặc định)" nhỏ cạnh phí lắp đặt khi sản phẩm chưa khai báo phí riêng */
+.detail-install-default {
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+/* Thumbnails ảnh phụ — hàng nhỏ dưới ảnh chính */
+.detail-thumbnails {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+/* Thumbnail nhỏ 64×64, viền cam khi active */
+.detail-thumbnails img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.detail-thumbnails img.thumb-active,
+.detail-thumbnails img:hover {
+  border-color: var(--primary);
+}
+
+/* Chọn biến thể (màu sắc, size...) */
+.detail-variants {
+  margin-bottom: 1.25rem;
+}
+/* Tiêu đề "Chọn màu sắc/kích thước..." */
+.detail-variants h4 {
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.6rem;
+}
+/* Hàng các nút biến thể */
+.variant-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+/* Nút biến thể — pill nhỏ, active viền cam */
+.variant-btn {
+  padding: 0.4rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: #fff;
+}
+.variant-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.variant-btn.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+}
+/* Biến thể hết hàng — mờ, không click */
+.variant-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── TAB NAV: Mô tả / Thông số / Đánh giá ── */
+
+/* Tab sticky dưới header — không cuộn mất khi scroll dài */
+.detail-tab-nav {
+  position: sticky;
+  top: 60px; /* Cách đỉnh viewport = chiều cao header */
+  z-index: 50;
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin: 2rem 0 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+/* Từng tab — chiếm đều nhau */
+.dtn-btn {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-light);
+  background: #fff;
+  border: none;
+  border-right: 1px solid var(--border); /* Phân cách giữa các tab */
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  white-space: nowrap;
+}
+.dtn-btn:last-child {
+  border-right: none;
+}
+.dtn-btn:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+/* Tab đang active — cam + gạch chân trong bằng inset box-shadow */
+.dtn-btn.dtn-active {
+  color: var(--primary);
+  font-weight: 700;
+  background: var(--primary-light);
+  box-shadow: inset 0 -2px 0 var(--primary); /* Gạch cam dưới */
+}
+@media (max-width: 600px) {
+  .detail-tab-nav {
+    top: 50px;
+  }
+  .dtn-btn {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ── BẢNG THÔNG SỐ KỸ THUẬT ── */
+
+/* Bảng 2 cột: tên thông số (trái, nền xám) + giá trị (phải) */
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.specs-table td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.specs-table tr:last-child td {
+  border-bottom: none;
+}
+/* Cột nhãn — 40% chiều rộng, nền xám, chữ đậm */
+.specs-table td:first-child {
+  width: 40%;
+  background: var(--bg-gray);
+  font-weight: 600;
+  color: var(--secondary);
+}
+/* Hover hàng — nền trắng sáng hơn */
+.specs-table tr:hover td {
+  background: #fafafa;
+}
+
+/* =======================================================
+   ĐÁNH GIÁ SẢN PHẨM (Hệ thống mới)
+   Gồm: tóm tắt điểm, form viết đánh giá, danh sách
+======================================================= */
+
+/* Section đánh giá — khoảng cách trên + viền trên */
+.rv-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border);
+}
+.rv-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* ── TÓM TẮT ĐIỂM ĐÁNH GIÁ ── */
+
+/* Box tóm tắt: số sao to bên trái + thanh bar bên phải */
+.rv-summary {
+  display: flex;
+  gap: 2rem;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+/* Bên trái: số điểm to + sao + nút viết đánh giá */
+.rv-summary-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 140px;
+}
+/* Số điểm TB to 3.5rem */
+.rv-avg-big {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--secondary);
+  line-height: 1;
+}
+.rv-avg-label {
+  font-size: 0.82rem;
+  color: var(--text-light);
+}
+.rv-avg-stars {
+  display: flex;
+  gap: 2px;
+  margin: 0.2rem 0;
+}
+/* Nút "Viết đánh giá" — cam, pill */
+.rv-write-btn {
+  margin-top: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+.rv-write-btn:hover {
+  background: var(--primary-dark);
+}
+/* Bên phải: thanh bar từng mức sao */
+.rv-summary-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+  max-width: 420px;
+}
+
+/* Từng hàng bar sao: số sao + track + count */
+.rv-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.rv-bar-label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-light);
+  width: 28px;
+  flex-shrink: 0;
+}
+/* Track nền xám + fill màu sao */
+.rv-bar-track {
+  flex: 1;
+  height: 10px;
+  background: var(--border);
+  border-radius: 50px;
+  overflow: hidden;
+}
+.rv-bar-fill {
+  height: 100%;
+  border-radius: 50px;
+  transition: width 0.4s ease; /* Animate khi tải */
+}
+/* Số lượng đánh giá bên phải thanh */
+.rv-bar-count {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  width: 24px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── FORM VIẾT ĐÁNH GIÁ ── */
+
+/* Form đánh giá — nền xám, viền xám */
+.rv-form {
+  background: var(--bg-gray);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+/* Hàng chọn sao */
+.rv-form-stars {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Wrapper textarea + label + đếm ký tự */
+.rv-textarea-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Label "Nội dung đánh giá" */
+.rv-textarea-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Textarea nhận xét */
+.rv-textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  min-height: 74px;
+}
+.rv-textarea:focus {
+  border-color: var(--primary);
+}
+.rv-textarea::placeholder {
+  font-size: 0.875rem;
+}
+
+/* Đếm ký tự — dòng riêng dưới textarea, căn phải */
+.rv-char-count {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  text-align: right;
+  line-height: 1;
+}
+
+/* Nút gửi đánh giá — cam primary khi active, xám khi disabled */
+.rv-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
+}
+.rv-submit-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+.rv-submit-btn:disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Nút hủy viết đánh giá */
+.rv-cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.25rem;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* ── DANH SÁCH ĐÁNH GIÁ ── */
+
+/* Toolbar lọc đánh giá: tiêu đề + nút lọc sao */
+.rv-list-section {
+  margin-top: 1.5rem;
+}
+.rv-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.rv-filter-bar strong {
+  font-size: 1rem;
+  color: var(--secondary);
+}
+/* Hàng nút lọc theo sao */
+.rv-filter-btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+/* Nút lọc sao — pill, active viền cam */
+.rv-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0.3rem 0.85rem;
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  background: #fff;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.rv-filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.rv-filter-btn.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* Danh sách đánh giá — xếp dọc */
+.rv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+/* Trạng thái chưa có đánh giá nào */
+.rv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem;
+  color: var(--text-light);
+  text-align: center;
+}
+
+/* Card từng đánh giá — viền xám, nền trắng */
+.rv-item {
+  padding: 1rem 1.25rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+}
+/* Hàng trên: avatar + tên + sao + nút xóa */
+.rv-item-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+/* Avatar chữ cái đầu — xanh dương nhạt #e0f2fe/#0ea5e9, đại diện cho KHÁCH HÀNG viết đánh giá.
+   Cố ý chọn xanh dương (trung lập, không phải cam thương hiệu hay xanh lá) để phân biệt rõ với
+   khối "phản hồi của shop" (.rv-seller-reply bên dưới, tông xanh lá) — khi đọc nhanh 1 đánh giá
+   có phản hồi, khách dễ tách được đâu là lời khách/đâu là lời shop chỉ qua màu, không cần đọc kỹ. */
+.rv-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: #0ea5e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+/* Thông tin người đánh giá */
+.rv-item-info {
+  flex: 1;
+}
+.rv-item-info strong {
+  font-size: 0.9rem;
+  color: var(--secondary);
+}
+.rv-item-stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 2px;
+}
+/* Nội dung nhận xét — lùi vào bằng chiều rộng avatar */
+.rv-comment {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
+  padding-left: 3.2rem; /* = chiều rộng avatar + gap */
+}
+/* Nút xóa đánh giá (admin) — tròn đỏ nhạt */
+.rv-delete-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fef2f2;
+  color: #ef4444;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.rv-delete-btn:hover {
+  background: #ef4444;
+  color: #fff; /* Đổi ngược màu khi hover */
+}
+
+/* Badge "Đã mua hàng" (Verified Purchase) — xanh lá nhạt */
+.rv-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.1rem 0.45rem;
+  background: #d1fae5;
+  color: #059669;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 4px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* Hàng tag gợi ý đánh giá nhanh (Giao hàng nhanh, Chất lượng tốt...) */
+.rv-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+/* Tag chip — click để chèn nhanh vào textarea */
+.rv-tag-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.7rem;
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  background: #fff;
+  font-size: 0.8125rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.rv-tag-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+/* Tag đã chọn — active cam nổi bật rõ */
+.rv-tag-btn.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Phản hồi của shop cho đánh giá — viền trái xanh, lùi vào. Tông xanh lá (#f0fdf4/#10b981) thay
+   vì cam thương hiệu, vì đây là NỘI DUNG (lời shop nói), không phải hành động/CTA — dùng cam ở
+   đây dễ gây nhầm với nút bấm. Xanh lá cũng ngầm gợi "đã được chăm sóc/phản hồi", khác hẳn xanh
+   dương trung lập của avatar khách ở .rv-avatar phía trên. */
+.rv-seller-reply {
+  margin: 0.5rem 0 0 3.2rem; /* Lùi vào khớp với rv-comment */
+  padding: 0.65rem 0.85rem;
+  background: #f0fdf4; /* Xanh lá nhạt — tone shop */
+  border-left: 3px solid #10b981;
+  border-radius: 0 8px 8px 0;
+}
+.rv-seller-reply-header {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: #059669;
+  margin-bottom: 0.3rem;
+}
+.rv-seller-reply-text {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Nút "Xử lý" cho admin/staff nhảy thẳng vào AdminReviews */
+.rv-admin-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  padding: 0.2rem 0.55rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.rv-admin-link:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Highlight hàng khi nhảy vào admin qua deep link — vàng mờ dần */
+@keyframes deeplink-fade {
+  0% {
+    background: #fef9c3;
+    box-shadow: inset 0 0 0 2px #f59e0b;
+  }
+  70% {
+    background: #fef9c3;
+    box-shadow: inset 0 0 0 2px #f59e0b;
+  }
+  100% {
+    background: transparent;
+    box-shadow: none;
+  }
+}
+.rv-deep-link-highlight {
+  animation: deeplink-fade 3.5s ease-out forwards;
+}
+
+/* Khu vực upload ảnh đánh giá — hiển thị dưới textarea */
+.rv-img-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Hàng chứa thumbnails + nút thêm — cuộn ngang nếu tràn */
+.rv-img-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Thumbnail ảnh đã upload — có nút X góc trên phải */
+.rv-img-thumb {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+/* Ảnh thật bên trong khung thumbnail ở trên */
+.rv-img-thumb img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  display: block;
+  cursor: default;
+}
+
+/* Nút xóa ảnh — tròn đỏ góc trên phải thumbnail */
+.rv-img-thumb-del {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  background: #ef4444;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  padding: 0;
+  z-index: 1;
+  transition: background 0.15s;
+}
+
+.rv-img-thumb-del:hover {
+  background: #b91c1c;
+}
+
+/* Ô thêm ảnh mới — hình vuông nét đứt, hover sáng lên */
+.rv-img-add {
+  width: 80px;
+  height: 80px;
+  border: 2px dashed var(--border);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    color 0.15s;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.rv-img-add:hover,
+.rv-img-add.drag-over {
+  border-color: var(--primary);
+  background: var(--primary-light, #fff7ed);
+  color: var(--primary);
+}
+
+/* Ô đang upload — cursor chờ */
+.rv-img-add.uploading {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+/* Chú thích số ảnh + hướng dẫn — dưới hàng thumbnails */
+.rv-img-hint {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* Hiển thị nhiều ảnh trong card đánh giá — lưới 72×72 */
+.rv-img-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  margin-left: 3.2rem;
+}
+
+/* Ảnh minh chứng trong card đánh giá — bấm vào mở ảnh gốc (link <a> bọc ngoài) */
+.rv-img-display a img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  transition: opacity 0.15s;
+}
+
+/* Mờ nhẹ khi hover để báo hiệu có thể click */
+.rv-img-display a:hover img {
+  opacity: 0.85;
+}
+
+/* ── ĐÁNH GIÁ SẢN PHẨM (Hệ thống cũ — giữ lại) ──
+   Bộ class .review-* này là hệ thống đánh giá CŨ, không còn được trang ProductDetail dùng
+   (đã thay bằng .rv-* ở khối "ĐÁNH GIÁ SẢN PHẨM (Hệ thống mới)" phía trên). Giữ lại phòng trường
+   hợp còn nơi khác tham chiếu — không xóa, không cần sửa thêm trừ khi dọn dẹp toàn bộ hệ cũ. */
+
+/* Khối đánh giá cũ — khoảng cách trên + viền trên, giống .rv-section bản mới */
+.review-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border);
+}
+/* Hàng tiêu đề + tóm tắt điểm, 2 đầu trang */
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.review-header h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+/* Cụm điểm số + sao bên phải tiêu đề */
+.review-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+/* Số điểm trung bình lớn */
+.review-avg {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--secondary);
+  line-height: 1;
+}
+
+/* Form viết đánh giá cũ */
+.review-form {
+  background: var(--bg-gray);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+/* Hàng chọn sao trong form cũ */
+.review-form-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+/* Textarea nhận xét bản cũ — không có đếm ký tự như bản .rv-textarea mới */
+.review-textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+}
+.review-textarea:focus {
+  border-color: var(--primary);
+}
+/* Nút gửi đánh giá cũ */
+.review-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  width: fit-content;
+}
+.review-submit-btn:hover {
+  background: var(--primary-dark);
+}
+.review-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Nhắc đăng nhập để đánh giá */
+.review-login-prompt {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--primary-light);
+  border: 1.5px solid #fed7aa;
+  border-radius: var(--radius-sm);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+/* Trạng thái chưa có đánh giá nào */
+.review-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem;
+  color: var(--text-light);
+  text-align: center;
+}
+/* Danh sách đánh giá cũ — xếp dọc, giống .rv-list bản mới */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+/* Card đánh giá cũ */
+.review-item {
+  padding: 1rem 1.25rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+}
+/* Hàng trên mỗi card: avatar + tên + sao */
+.review-item-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+/* Comment cũ — lùi vào bằng avatar */
+.review-comment {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
+  padding-left: 3rem;
+}
+
+/* ── MÀU SẮC SẢN PHẨM ── */
+
+/* Section chọn màu */
+.detail-colors {
+  margin-bottom: 1.25rem;
+}
+.detail-colors h4 {
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+}
+/* Hàng chip màu sắc */
+.detail-color-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+/* Chip màu: ô màu + tên màu */
+.detail-color-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.45rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  cursor: default;
+  transition: border-color 0.15s;
+}
+.detail-color-item:hover {
+  border-color: var(--primary);
+}
+/* Ô màu vuông nhỏ */
+.detail-color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.15); /* Viền nhạt xác định hình dạng */
+  flex-shrink: 0;
+}
+/* Tên màu */
+.detail-color-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+/* Placeholder ảnh khi không có ảnh sản phẩm */
+.product-img-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--bg-gray);
+  border-radius: var(--radius);
+}
+
+/* Mobile: trang sản phẩm 1 cột */
+@media (max-width: 768px) {
+  .products-layout {
+    grid-template-columns: 1fr;
+  }
+}

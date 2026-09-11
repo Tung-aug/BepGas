@@ -1,0 +1,732 @@
+/* =======================================================
+   TRANG THANH TOÁN — 3 bước: Thông tin → Thanh toán → Xác nhận
+   Layout 2 cột: form bên trái + tóm tắt đơn hàng bên phải
+======================================================= */
+
+/* Trang thanh toán — nền xám, chiều cao tối thiểu = trang */
+.checkout-page {
+  padding: 3.5rem 0 6rem;
+  flex: 1; /* Kết hợp với flex column trên .app để lấp đầy chiều cao */
+  background: var(--bg-gray);
+}
+
+/* ── THANH TIẾN TRÌNH 3 BƯỚC ── */
+
+/* Hàng ngang hiển thị bước hiện tại — căn giữa trang */
+.checkout-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  gap: 0;
+}
+/* Từng bước — vòng tròn số + chữ tên bước */
+.checkout-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+/* Vòng tròn số thứ tự — xám mặc định */
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: #fff;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+/* Đường kẻ ngang nối giữa các bước */
+.step-line {
+  width: 80px;
+  height: 2px;
+  background: var(--border);
+  margin: 0 0.5rem;
+}
+/* Bước đang active — vòng tròn cam đặc */
+.checkout-step.active .step-circle {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+/* Tên bước active — cam, đậm */
+.checkout-step.active span {
+  color: var(--primary);
+  font-weight: 700;
+}
+/* Bước đã hoàn thành — vòng tròn xanh lá */
+.checkout-step.done .step-circle {
+  border-color: #10b981;
+  background: #10b981;
+  color: #fff;
+}
+/* Đường nối đã hoàn thành — cam */
+.checkout-step.done .step-line {
+  background: var(--primary);
+}
+
+/* ── LAYOUT 2 CỘT ── */
+
+/* Cột trái linh hoạt (form) + cột phải cố định 420px (tóm tắt) */
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 2rem;
+  align-items: start; /* Không kéo dài, chỉ cao theo nội dung */
+}
+
+/* ── CARD FORM TỪNG BƯỚC ── */
+
+/* Card trắng bao quanh form mỗi bước */
+.checkout-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 1.25rem;
+}
+/* Tiêu đề card: icon + chữ, viền dưới phân cách với form */
+.checkout-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── FORM THÔNG TIN GIAO HÀNG ── */
+
+/* Grid 2 cột — tên + số điện thoại cạnh nhau */
+.checkout-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+/* Field full-width — địa chỉ, ghi chú kéo dài suốt 2 cột */
+.checkout-form .full-width {
+  grid-column: 1 / -1;
+}
+/* Select tỉnh/thành/quận */
+.checkout-form select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+.checkout-form select:focus {
+  border-color: var(--primary);
+}
+/* Select lỗi validation — viền đỏ */
+.checkout-form select.input-error {
+  border-color: #ef4444;
+}
+/* Textarea ghi chú — chỉ cho kéo dọc để không vỡ layout */
+.checkout-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s;
+  font-family: inherit; /* Kế thừa font site, không bị monospace */
+}
+.checkout-form textarea:focus {
+  border-color: var(--primary);
+}
+
+/* Dấu * bắt buộc — đỏ để phân biệt với label thường */
+.required {
+  color: #ef4444;
+}
+
+/* ── PHƯƠNG THỨC THANH TOÁN ── */
+
+/* Danh sách tùy chọn thanh toán — xếp dọc */
+.pay-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+/* Từng tùy chọn — radio ẩn, toàn bộ area là vùng click */
+.pay-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+/* Ẩn radio gốc — dùng custom style */
+.pay-option input[type='radio'] {
+  display: none;
+}
+.pay-option:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+/* Option đang được chọn — viền cam, nền cam nhạt */
+.pay-selected {
+  border-color: var(--primary) !important;
+  background: var(--primary-light);
+}
+
+/* Icon phương thức thanh toán — mỗi loại 1 màu RIÊNG (xanh dương/xanh lá/tím), khác hẳn cách
+   site này thường chỉ dùng cam/đỏ/xanh lá cho thương hiệu/lỗi/thành công — ở đây mục đích là
+   giúp khách phân biệt NHANH 3 phương thức khác nhau bằng màu khi quét mắt qua danh sách dọc,
+   nên cố tình chọn 3 màu xa nhau trên vòng màu (không liên quan ý nghĩa thương hiệu hay trạng
+   thái), viền/nền chọn đang chọn dùng cam (var(--primary)) độc lập với màu icon. */
+.pay-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+/* COD — xanh dương nhạt */
+.pay-icon.cod {
+  background: #e0f2fe;
+  color: #0ea5e9;
+}
+/* Chuyển khoản ngân hàng — xanh lá nhạt */
+.pay-icon.bank {
+  background: #dcfce7;
+  color: #10b981;
+}
+/* Thẻ tín dụng — tím nhạt */
+.pay-icon.card {
+  background: #ede9fe;
+  color: #8b5cf6;
+}
+
+/* Nội dung text option: tên phương thức + mô tả */
+.pay-info {
+  flex: 1;
+}
+.pay-info strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--secondary);
+  margin-bottom: 0.15rem;
+}
+.pay-info span {
+  font-size: 0.87rem;
+  color: var(--text-light);
+}
+/* Icon ✓ hiển thị khi option được chọn */
+.pay-check {
+  flex-shrink: 0;
+}
+
+/* ── THÔNG TIN CHUYỂN KHOẢN NGÂN HÀNG ── */
+
+/* Bảng thông tin tài khoản ngân hàng — nền xám nhạt */
+.bank-info {
+  background: var(--bg-gray);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+/* Tiêu đề "Thông tin chuyển khoản" */
+.bank-info h4 {
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+/* Từng dòng thông tin: nhãn trái + giá trị phải */
+.bank-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px dashed var(--border); /* Đường chấm phân cách dịu hơn solid */
+}
+.bank-row:last-child {
+  border-bottom: none;
+}
+.bank-row span {
+  color: var(--text-light);
+}
+.bank-row strong {
+  color: var(--secondary);
+}
+
+/* ── FORM NHẬP THẺ TÍN DỤNG ── */
+
+/* Grid 2 cột: số thẻ full-width, tháng/CVV cạnh nhau */
+.card-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.card-form .full-width {
+  grid-column: 1 / -1;
+}
+.card-form input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.card-form input:focus {
+  border-color: var(--primary);
+}
+
+/* ── TÓM TẮT ĐỊA CHỈ GIAO HÀNG ── */
+
+/* Box địa chỉ giao hàng ở bước 2 — nền xám, chỉ đọc */
+.delivery-summary {
+  background: var(--bg-gray);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+}
+/* Tiêu đề "Địa chỉ giao hàng" */
+.delivery-summary h4 {
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.75rem;
+}
+.delivery-summary p {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+/* Link đổi địa chỉ — nhỏ, cam */
+.change-address {
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+  display: inline-block;
+}
+.change-address:hover {
+  text-decoration: underline;
+}
+
+/* ── TOAST LỖI ĐẶT HÀNG ── */
+
+/* Toast lỗi cố định ở đỉnh trang — hiện dù đang scroll
+   dưới sticky header (top:5rem) */
+.checkout-toast-error {
+  position: fixed;
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%); /* Căn giữa ngang */
+  z-index: 9900; /* Trên tất cả trừ modal */
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #fef2f2; /* Nền đỏ nhạt */
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  border-left: 4px solid #ef4444; /* Viền đỏ đậm bên trái làm điểm nhấn */
+  padding: 0.8rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.14);
+  max-width: 620px;
+  width: calc(100% - 2rem); /* Padding 1rem mỗi bên */
+  animation: toastSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Keyframe: trượt từ trên xuống khi xuất hiện */
+@keyframes toastSlideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+@media (max-width: 640px) {
+  .checkout-toast-error {
+    top: 4rem; /* Gần trên hơn vì header mobile thấp hơn */
+    font-size: 0.84rem;
+  }
+}
+
+/* ── NÚT ĐIỀU HƯỚNG BƯỚC ── */
+
+/* Hàng nút: "Quay lại" trái + "Tiếp tục/Đặt hàng" phải */
+.checkout-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+/* Nút đặt hàng — to hơn nút thông thường */
+.btn-order {
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  gap: 0.6rem;
+}
+
+/* ── CỘT PHẢI: TÓM TẮT ĐƠN HÀNG ── */
+
+/* Card tóm tắt — sticky khi scroll (theo trang, không theo modal) */
+.checkout-summary {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  position: sticky;
+  top: 120px; /* Dưới header sticky 120px */
+}
+.checkout-summary h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Danh sách sản phẩm mini trong tóm tắt */
+.summary-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-bottom: 1rem;
+}
+/* Từng sản phẩm: ảnh thumbnail + tên + giá */
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+/* Wrapper ảnh — relative để đặt badge số lượng tuyệt đối */
+.summary-item-img {
+  position: relative;
+  flex-shrink: 0;
+}
+.summary-item-img img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+/* Badge số lượng — vòng tròn tối, góc trên phải ảnh */
+.summary-qty {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  background: var(--secondary);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Tên sản phẩm — chiếm không gian còn lại */
+.summary-item-name {
+  flex: 1;
+  font-size: 0.93rem;
+  color: var(--text);
+  line-height: 1.45;
+  font-weight: 500;
+}
+/* Giá sản phẩm — không xuống hàng */
+.summary-item-price {
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: var(--secondary);
+  white-space: nowrap;
+}
+/* Đường kẻ ngang phân cách danh sách và phần cộng tiền */
+.summary-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.1rem 0;
+}
+/* Đường kẻ mỏng giữa các nhóm trong tóm tắt checkout */
+.summary-mini-divider {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 0.5rem 0;
+}
+/* Dòng tên voucher trong tóm tắt checkout */
+.summary-voucher-name {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  margin-top: 0.15rem;
+}
+/* Dòng "Tiền hàng sau giảm" — hơi đậm hơn các dòng thường */
+.summary-after-discount {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+/* Override size summary-row/total trong checkout (to hơn so với cart) */
+.checkout-summary .summary-row {
+  font-size: 0.97rem;
+  margin-bottom: 0.9rem;
+}
+.checkout-summary .summary-total {
+  font-size: 1.25rem;
+}
+/* Số tiền tổng trong tóm tắt checkout — cam */
+.checkout-summary .summary-total span:last-child {
+  color: var(--primary);
+}
+
+/* ── TOGGLE DỊCH VỤ LẮP ĐẶT ── */
+
+/* Checkbox mini "Lắp đặt" bên dưới từng sản phẩm
+   Tím vì dịch vụ (phân biệt với màu cam của thương hiệu) */
+.ck-install-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #7c3aed; /* Tím — màu dịch vụ lắp đặt */
+  cursor: pointer;
+  user-select: none; /* Không cho bôi đen text khi click */
+  padding: 0.18rem 0.5rem 0.18rem 0.3rem;
+  border-radius: 5px;
+  border: 1px solid #ede9fe; /* Viền tím nhạt */
+  background: #f5f3ff; /* Nền tím cực nhạt */
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+/* Khi chưa check — style xám thông thường */
+.ck-install-toggle:has(input:not(:checked)) {
+  color: var(--text-light);
+  background: #f8fafc;
+  border-color: var(--border);
+}
+/* Checkbox trong toggle — accent-color tím đồng bộ */
+.ck-install-toggle input {
+  width: 14px;
+  height: 14px;
+  accent-color: #7c3aed;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* =======================================================
+   TRANG XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG
+======================================================= */
+
+/* Trang thành công — căn giữa card */
+.checkout-success {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.25rem;
+  background: var(--bg-gray);
+}
+/* Card thành công — tối đa 520px, bóng đậm */
+.success-card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  padding: 3rem 2.5rem;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+}
+/* Icon checkmark xanh lá to */
+.success-icon {
+  margin-bottom: 1.25rem;
+}
+/* Tiêu đề "Đặt hàng thành công!" */
+.success-card h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--secondary);
+  margin-bottom: 0.75rem;
+}
+/* Đoạn mô tả cảm ơn + hướng dẫn tiếp theo */
+.success-card p {
+  color: var(--text-light);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+/* Highlight cam trong đoạn text */
+.success-card p strong {
+  color: var(--primary);
+}
+
+/* Hộp mã đơn hàng — viền chấm cam, nền cam nhạt */
+.order-code {
+  background: var(--primary-light);
+  border: 2px dashed var(--primary); /* Viền chấm gợi ý "quan trọng, ghi lại" */
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+/* Số mã đơn — cam đậm, giãn chữ dễ đọc */
+.order-code strong {
+  color: var(--primary);
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+}
+
+/* Thông tin giao hàng xác nhận — xám, căn trái */
+.success-info {
+  background: var(--bg-gray);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+/* Từng dòng thông tin (người nhận, SĐT, địa chỉ...) */
+.success-info div {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+/* Hàng nút CTA sau thành công — wrap khi hẹp màn hình */
+.success-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Nút hành động trang thất bại thanh toán VNPay */
+.payment-fail-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+/* Nút trong trang thất bại — có chiều rộng tối thiểu để đều nhau */
+.payment-fail-actions .btn {
+  min-width: 170px;
+  justify-content: center;
+}
+
+/* Nút ghost nhỏ — link style dạng button */
+.btn-ghost-sm {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  text-decoration: underline;
+}
+.btn-ghost-sm:hover {
+  color: var(--text);
+}
+
+/* ── RESPONSIVE ── */
+
+/* Tablet nằm (≤900px): 1 cột, summary không sticky nữa */
+@media (max-width: 900px) {
+  .checkout-layout {
+    grid-template-columns: 1fr; /* Xếp dọc */
+  }
+  .checkout-summary {
+    position: static; /* Bỏ sticky */
+  }
+  .checkout-form {
+    grid-template-columns: 1fr; /* Form 1 cột */
+  }
+  .card-form {
+    grid-template-columns: 1fr;
+  }
+  .checkout-steps {
+    gap: 0;
+  }
+  /* Đường nối ngắn hơn khi màn hình nhỏ */
+  .step-line {
+    width: 40px;
+  }
+}
+
+/* Chỉ hiện step indicator text — ẩn mặc định, hiện trên mobile nhỏ */
+.checkout-step-indicator {
+  display: none;
+}
+
+/* Viền đỏ + glow khi input có lỗi */
+.input-wrap-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.12);
+}
+
+/* Mobile nhỏ (≤480px): ẩn stepper icon, thay bằng text "Bước X/3" */
+@media (max-width: 480px) {
+  .checkout-card {
+    padding: 1.25rem; /* Padding nhỏ hơn */
+  }
+  .success-card {
+    padding: 2rem 1.25rem;
+  }
+  /* Ẩn thanh tiến trình icon — quá nhỏ trên mobile */
+  .checkout-steps {
+    display: none;
+  }
+  /* Hiện text indicator thay thế */
+  .checkout-step-indicator {
+    display: block;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--text-light);
+    margin-bottom: 1.25rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  /* Số bước hiện tại — cam */
+  .checkout-step-indicator strong {
+    color: var(--primary);
+  }
+}

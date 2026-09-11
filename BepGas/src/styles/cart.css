@@ -1,0 +1,210 @@
+/* =======================================================
+   TRANG GIỎ HÀNG (cũ — được thay bởi cart-v2.css)
+   Giữ lại để tương thích với các component chưa migrate
+======================================================= */
+
+/* Trang giỏ hàng — padding dọc lớn */
+.cart-page {
+  padding: 3.5rem 0 6rem;
+  flex: 1;
+}
+
+/* Header: tiêu đề trái + nút "Xóa tất cả" phải */
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.25rem;
+}
+/* Chữ "Giỏ hàng" to */
+.cart-header h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+/* Nút xóa tất cả — dạng link, không có nền/viền để không cạnh tranh sự chú ý với nút
+   "Tiến hành thanh toán" (CTA chính). Màu #ef4444 (đỏ) vì đây là hành động PHÁ HỦY dữ liệu
+   (xóa toàn bộ giỏ hàng, không hoàn tác) — đỏ theo quy ước UI chung báo hiệu rủi ro/cẩn trọng,
+   khác hẳn màu cam thương hiệu (var(--primary)) dùng cho các hành động tích cực/mua hàng. */
+.clear-cart {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #ef4444;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.clear-cart:hover {
+  text-decoration: underline;
+}
+
+/* Layout 2 cột: danh sách sản phẩm + bảng tóm tắt */
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px; /* Bảng tóm tắt cố định 380px */
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* Hàng sản phẩm trong giỏ: ảnh | tên+giá đơn | số lượng+tổng+xóa */
+.cart-item {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1.4rem;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 0.85rem;
+}
+/* Ảnh sản phẩm nhỏ */
+.cart-item img {
+  width: 110px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+/* Tên sản phẩm — màu var(--secondary) (đen/xám đậm) lúc bình thường để dễ đọc trên nền trắng,
+   đổi sang var(--primary) (cam thương hiệu) khi hover để báo hiệu đây là link có thể bấm vào
+   xem chi tiết sản phẩm, đồng bộ quy ước "hover ra cam" dùng xuyên suốt toàn site. */
+.cart-item-info h3 {
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: 0.4rem;
+}
+.cart-item-info h3:hover {
+  color: var(--primary);
+}
+/* Cột phải: số lượng + tổng tiền + nút xóa */
+.cart-item-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+/* Tổng tiền sản phẩm — dùng var(--primary) (cam thương hiệu) để số tiền là điểm nhìn nổi bật
+   nhất trong dòng sản phẩm, vì đây là thông tin khách quan tâm nhất khi rà giỏ hàng. */
+.item-total {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+/* Nút xóa 1 sản phẩm — đỏ #ef4444 cùng lý do với .clear-cart: hành động xóa/phá hủy, không
+   dùng màu thương hiệu để tránh khách hiểu lầm đây là hành động được khuyến khích. */
+.remove-btn {
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  font-size: 0.82rem;
+  gap: 0.25rem;
+}
+.remove-btn:hover {
+  text-decoration: underline;
+}
+
+/* Bảng tóm tắt đơn hàng — sticky khi scroll */
+.cart-summary {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  position: sticky;
+  top: 120px; /* Cách đỉnh bằng chiều cao header */
+}
+/* Chữ "Tóm tắt đơn hàng" */
+.cart-summary h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 1.4rem;
+}
+
+/* Từng dòng tóm tắt: "Tạm tính X đ" — ngang hai đầu */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  margin-bottom: 0.85rem;
+  color: var(--text);
+}
+/* Chữ "Miễn phí" vận chuyển — xanh lá #10b981, theo quy ước UI chung: xanh lá = tin tích cực/ưu
+   đãi cho khách (đối lập với đỏ = lỗi/cảnh báo ở .clear-cart, .remove-btn phía trên). */
+.free-shipping {
+  color: #10b981;
+  font-weight: 600;
+}
+/* Ghi chú điều kiện miễn phí vận chuyển */
+.shipping-note {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-bottom: 0.85rem;
+}
+
+/* Dòng tổng cộng — to hơn, viền trên phân cách */
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--secondary);
+  border-top: 2px solid var(--border);
+  padding-top: 0.85rem;
+  margin-top: 0.85rem;
+  margin-bottom: 1.4rem;
+}
+/* Nút "Tiến hành thanh toán" — CTA (call-to-action) quan trọng nhất của trang giỏ hàng, nên dùng
+   nền var(--primary) (cam thương hiệu, màu có độ tương phản/thu hút cao nhất trong bảng màu) +
+   full width để chiếm trọn sự chú ý. Hover đổi sang var(--primary-dark) (cam đậm hơn) để phản
+   hồi rõ ràng là đang hover, không đổi sang màu khác hẳn vì vẫn muốn giữ liên tưởng "nút chính". */
+.checkout-btn {
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background 0.2s;
+  margin-bottom: 0.85rem;
+}
+.checkout-btn:hover {
+  background: var(--primary-dark);
+}
+
+/* Link "← Tiếp tục mua sắm" — màu var(--text-light) (xám nhạt) lúc bình thường vì là hành động
+   PHỤ (không phải mục tiêu chính của trang), tránh cạnh tranh màu cam với nút checkout. Hover
+   mới đổi sang var(--primary) để xác nhận đây vẫn là link bấm được. */
+.continue-shopping {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: var(--text-light);
+  font-size: 0.88rem;
+}
+.continue-shopping:hover {
+  color: var(--primary);
+}
+
+/* Màn hình giỏ hàng trống — icon lớn + hướng dẫn */
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 6rem 1rem;
+  flex: 1;
+  text-align: center;
+}
+/* Tiêu đề "Giỏ hàng trống" */
+.cart-empty h2 {
+  font-size: 1.6rem;
+  color: var(--secondary);
+}
+/* Câu gợi ý đi mua sắm */
+.cart-empty p {
+  color: var(--text-light);
+}

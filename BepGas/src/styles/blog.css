@@ -1,0 +1,271 @@
+/* =======================================================
+   BLOG / CẨM NANG NHÀ BẾP
+   Gồm: trang danh sách bài, trang chi tiết bài viết
+======================================================= */
+
+/* Trang blog chính — padding dọc để tạo khoảng thở */
+.blog-page {
+  padding: 3.5rem 0 6rem;
+}
+
+/* ── Hero section đầu trang ── */
+
+/* Khu vực giới thiệu blog — căn giữa nội dung */
+.blog-hero {
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+}
+
+/* Tiêu đề hero — dùng clamp() để tự động co giãn theo màn hình */
+.blog-hero-title {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* Mô tả ngắn bên dưới tiêu đề hero */
+.blog-hero-sub {
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+/* ── Danh sách bài viết ── */
+
+/* Grid hiển thị các card bài viết — tự động wrap khi hẹp màn hình */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Card từng bài viết — hover nhấc lên nhẹ tạo cảm giác tương tác */
+.blog-card {
+  display: flex;
+  flex-direction: column; /* Ảnh trên, nội dung dưới */
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; /* Ảnh không tràn ra ngoài bo góc */
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+  text-decoration: none;
+  color: inherit; /* Kế thừa màu chữ, không bị màu link mặc định */
+}
+.blog-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px); /* Nâng card lên 2px khi hover */
+}
+
+/* Vùng ảnh thumbnail bài viết — nền var(--primary-light) (cam rất nhạt) làm placeholder khi bài
+   chưa có ảnh, dùng cam nhạt thay vì xám trung lập để khung ảnh trống vẫn mang nhận diện thương
+   hiệu, không bị "lạc tông" giữa các card đã có ảnh thật. */
+.blog-card-img {
+  background: var(--primary-light);
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Phần nội dung card — dùng flex:1 để luôn chiếm hết không gian còn lại */
+.blog-card-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1; /* Đẩy footer card xuống đáy dù nội dung ngắn */
+}
+
+/* Tiêu đề bài viết trong card */
+.blog-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Mô tả ngắn — giới hạn 3 dòng, cắt bớt nếu dài hơn */
+.blog-card-intro {
+  font-size: 0.87rem;
+  color: var(--text-light);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1; /* Chiếm không gian còn lại trong card body */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Giới hạn 3 dòng */
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Metadata: ngày đăng, lượt xem — hiển thị ngang */
+.blog-card-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+.blog-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* Khoảng cách giữa icon và chữ */
+}
+
+/* Tag danh mục bài viết — pill nhỏ, hiển thị ở đầu card */
+.blog-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px; /* Bo tròn hoàn toàn dạng pill */
+  width: fit-content; /* Chỉ rộng bằng nội dung */
+}
+
+/* ── Trang chi tiết bài viết ── */
+
+/* Nút quay lại trang danh sách — xám var(--text-light) lúc nghỉ vì là điều hướng phụ, không
+   phải nội dung chính của trang; hover đổi var(--primary) để xác nhận là link bấm được, theo
+   đúng quy ước "hover ra cam" dùng nhất quán toàn site (xem .cart-item-info h3 trong cart.css). */
+.blog-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-light);
+  font-size: 0.88rem;
+  margin-bottom: 1.5rem;
+  transition: color 0.15s;
+}
+.blog-back:hover {
+  color: var(--primary);
+}
+
+/* Wrapper nội dung bài — giới hạn chiều rộng để dễ đọc */
+.blog-article {
+  max-width: 760px;
+  margin: 0 auto; /* Căn giữa trang */
+}
+
+/* Header bài viết: tiêu đề + meta + intro */
+.blog-article-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border); /* Đường kẻ ngăn cách header và body */
+  margin-bottom: 2rem;
+}
+
+/* Tiêu đề bài viết chi tiết — to hơn tiêu đề card */
+.blog-article-title {
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 800;
+  color: var(--secondary);
+  line-height: 1.35;
+  margin: 0;
+}
+
+/* Metadata bài viết: tác giả, ngày, số lượt xem */
+.blog-article-meta {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.83rem;
+  color: var(--text-light);
+}
+.blog-article-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Đoạn tóm tắt nổi bật đầu bài — mô phỏng kiểu "trích dẫn/lưu ý" thường gặp trong blog: nền
+   var(--bg-gray) tách khối khỏi nội dung thường, viền trái var(--primary) (cam đặc, không phải
+   --primary-light) để đoạn này hút mắt NGAY khi vừa cuộn tới, vì đây thường là phần tóm tắt
+   quan trọng nhất bài viết. */
+.blog-article-intro {
+  font-size: 1rem;
+  color: var(--text-light);
+  line-height: 1.7;
+  background: var(--bg-gray);
+  border-left: 3px solid var(--primary); /* Viền cam bên trái làm điểm nhấn */
+  padding: 0.85rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 0;
+}
+
+/* Nội dung chính bài viết — các section xếp dọc cách nhau */
+.blog-article-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Tiêu đề từng section trong bài — dùng var(--primary-light) (cam NHẠT, khác với viền cam đặc ở
+   .blog-article-intro phía trên) vì đây chỉ là gạch trang trí phân cách thông thường giữa nhiều
+   section, lặp lại nhiều lần trong 1 bài — nếu dùng cam đặc sẽ gây "loãng" điểm nhấn, khiến đoạn
+   tóm tắt đầu bài không còn nổi bật nhất nữa. */
+.blog-section-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--primary-light); /* Gạch cam nhạt phân cách heading và nội dung */
+}
+
+/* Nội dung từng section */
+.blog-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.blog-section-body p {
+  font-size: 0.95rem;
+  line-height: 1.75; /* Khoảng cách dòng rộng để dễ đọc */
+  color: var(--text);
+  margin: 0;
+}
+.blog-section-body p:empty {
+  display: none; /* Ẩn đoạn trống */
+}
+
+/* Footer bài viết — CTA mời mua hàng / xem thêm */
+.blog-article-footer {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: var(--bg-gray);
+  border-radius: var(--radius);
+  text-align: center;
+}
+/* Câu mời hành động phía trên 2 nút CTA */
+.blog-article-footer p {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Hàng nút CTA trong footer — wrap khi hẹp màn hình */
+.blog-article-ctas {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap; /* Xuống hàng khi không đủ chỗ */
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  /* Màn hình nhỏ: 1 cột thay vì grid nhiều cột */
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+  /* Nút CTA xếp dọc thay vì ngang */
+  .blog-article-ctas {
+    flex-direction: column;
+    align-items: center;
+  }
+}

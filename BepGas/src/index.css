@@ -1,0 +1,21 @@
+/* BepGas — Entry point CSS
+   Mỗi @import tương ứng một nhóm style riêng biệt.
+   Để tìm style của một component/page, xem file tương ứng trong src/styles/ */
+
+@import './styles/base.css'; /* reset, CSS variables, fonts, container, buttons */
+@import './styles/header.css'; /* header, navbar */
+@import './styles/home.css'; /* sections layout, hero, trust badges, categories, product card */
+@import './styles/banners.css'; /* promo banner, hero slider, popup banner, sidebar banner */
+@import './styles/admin-banners.css'; /* admin: grouped link dropdown, link picker, scroll banner row, banner section */
+@import './styles/products.css'; /* testimonials, products list page, product detail page */
+@import './styles/cart.css'; /* cart page (classic) */
+@import './styles/mega-menu.css'; /* mega menu danh mục */
+@import './styles/auth.css'; /* account header area, login, register */
+@import './styles/footer.css'; /* footer + responsive media queries */
+@import './styles/checkout.css'; /* checkout flow, order success */
+@import './styles/admin.css'; /* admin login, admin dashboard */
+@import './styles/account.css'; /* account page, wishlist */
+@import './styles/filter.css'; /* filter sidebar, dual range sliders */
+@import './styles/order-card.css'; /* order card trạng thái */
+@import './styles/cart-v2.css'; /* coupon section, cart v2 layout */
+@import './styles/blog.css'; /* blog / cẩm nang nhà bếp */
